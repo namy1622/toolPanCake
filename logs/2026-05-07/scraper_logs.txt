@@ -1,0 +1,621 @@
+2026-05-07 13:49:23,400 - INFO - ==================================================
+2026-05-07 13:49:23,400 - INFO -  BẮT ĐẦU CHẠY TOOL LẤY DỮ LIỆU PANCAKE (PYTHON) - LẤY NHIỀU CHAT
+2026-05-07 13:49:23,400 - INFO - ==================================================
+2026-05-07 13:49:23,814 - INFO - Đang kết nối tới trình duyệt Chrome qua cổng 9222...
+2026-05-07 13:49:24,212 - INFO - Kết nối thành công!
+2026-05-07 13:49:24,213 - INFO - Đã tìm thấy 3 tabs đang mở.
+2026-05-07 13:49:24,213 - INFO - Đang dùng tab Pancake hiện tại: https://pancake.vn/941461145712453
+2026-05-07 13:49:24,213 - INFO - Đang chờ trang tải hoàn tất (5s)...
+2026-05-07 13:49:29,223 - INFO - Tìm danh sách đoạn chat trên sidebar...
+2026-05-07 13:49:29,286 - INFO - Tìm thấy 9 đoạn chat trên màn hình.
+2026-05-07 13:49:29,286 - INFO - --- Đang xử lý chat thứ 1/9 ---
+2026-05-07 13:49:31,396 - INFO - Đã click vào đoạn chat: Quách Ngọc 13:29 Tầm 3-4 ngày 
+2026-05-07 13:49:31,396 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:49:37,816 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\screenshot_chat_1.png
+2026-05-07 13:49:37,816 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:49:37,831 - INFO - Tên khách hàng: Quách Ngọc
+2026-05-07 13:49:37,831 - INFO - Số lượng tin nhắn lấy được: 91
+2026-05-07 13:49:37,832 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_1_Quách Ngọc.json
+2026-05-07 13:49:37,833 - INFO - --- Đang xử lý chat thứ 2/9 ---
+2026-05-07 13:49:38,499 - INFO - Đã click vào đoạn chat: Xuân Bùi 13:11 Không
+2026-05-07 13:49:38,499 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:49:45,384 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\screenshot_chat_2.png
+2026-05-07 13:49:45,384 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:49:45,391 - INFO - Tên khách hàng: Xuân Bùi
+2026-05-07 13:49:45,391 - INFO - Số lượng tin nhắn lấy được: 21
+2026-05-07 13:49:45,392 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_2_Xuân Bùi.json
+2026-05-07 13:49:45,392 - INFO - --- Đang xử lý chat thứ 3/9 ---
+2026-05-07 13:49:46,049 - INFO - Đã click vào đoạn chat: Xuân Bùi 13:09 1 hop co bao nh
+2026-05-07 13:49:46,050 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:49:52,761 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\screenshot_chat_3.png
+2026-05-07 13:49:52,761 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:49:52,765 - INFO - Tên khách hàng: Xuân Bùi
+2026-05-07 13:49:52,765 - INFO - Số lượng tin nhắn lấy được: 4
+2026-05-07 13:49:52,767 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_3_Xuân Bùi.json
+2026-05-07 13:49:52,767 - INFO - --- Đang xử lý chat thứ 4/9 ---
+2026-05-07 13:49:53,418 - INFO - Đã click vào đoạn chat: Thăng Dương 13:06 Alo
+2026-05-07 13:49:53,418 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:49:59,047 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\screenshot_chat_4.png
+2026-05-07 13:49:59,048 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:49:59,055 - INFO - Tên khách hàng: Thăng Dương
+2026-05-07 13:49:59,055 - INFO - Số lượng tin nhắn lấy được: 40
+2026-05-07 13:49:59,056 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_4_Thăng Dương.json
+2026-05-07 13:49:59,056 - INFO - --- Đang xử lý chat thứ 5/9 ---
+2026-05-07 13:49:59,745 - INFO - Đã click vào đoạn chat: Thiện Tống 13:05 [Photo]
+2026-05-07 13:49:59,745 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:50:05,896 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\screenshot_chat_5.png
+2026-05-07 13:50:05,896 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:50:05,903 - INFO - Tên khách hàng: Thiện Tống
+2026-05-07 13:50:05,903 - INFO - Số lượng tin nhắn lấy được: 32
+2026-05-07 13:50:05,905 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_5_Thiện Tống.json
+2026-05-07 13:50:05,905 - INFO - --- Đang xử lý chat thứ 6/9 ---
+2026-05-07 13:50:06,579 - INFO - Đã click vào đoạn chat: Nguyễn Thùy Dương 12:54 [Stick
+2026-05-07 13:50:06,579 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:50:13,724 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\screenshot_chat_6.png
+2026-05-07 13:50:13,724 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:50:13,735 - INFO - Tên khách hàng: Nguyễn Thùy Dương
+2026-05-07 13:50:13,735 - INFO - Số lượng tin nhắn lấy được: 94
+2026-05-07 13:50:13,736 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_6_Nguyễn Thùy Dương.json
+2026-05-07 13:50:13,736 - INFO - --- Đang xử lý chat thứ 7/9 ---
+2026-05-07 13:50:14,391 - INFO - Đã click vào đoạn chat: Dao Thi Song 12:44 Toàn bọn lừ
+2026-05-07 13:50:14,392 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:50:18,010 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\screenshot_chat_7.png
+2026-05-07 13:50:18,011 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:50:18,016 - INFO - Tên khách hàng: Dao Thi Song
+2026-05-07 13:50:18,016 - INFO - Số lượng tin nhắn lấy được: 4
+2026-05-07 13:50:18,017 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_7_Dao Thi Song.json
+2026-05-07 13:50:18,017 - INFO - --- Đang xử lý chat thứ 8/9 ---
+2026-05-07 13:50:18,319 - WARNING - Lỗi khi click đoạn chat 8: Page.wait_for_timeout: Target page, context or browser has been closed
+2026-05-07 13:50:18,320 - INFO - --- Đang xử lý chat thứ 9/9 ---
+2026-05-07 13:50:18,323 - WARNING - Lỗi khi click đoạn chat 9: Locator.scroll_into_view_if_needed: Target page, context or browser has been closed
+2026-05-07 13:50:18,323 - INFO - ==================================================
+2026-05-07 13:50:18,323 - INFO -  HOÀN TẤT QUÉT TẤT CẢ ĐOẠN CHAT!
+2026-05-07 13:50:18,323 - INFO - ==================================================
+2026-05-07 13:53:33,514 - INFO - ==================================================
+2026-05-07 13:53:33,514 - INFO -  BẮT ĐẦU CHẠY TOOL LẤY DỮ LIỆU PANCAKE (PYTHON) - LẤY NHIỀU CHAT
+2026-05-07 13:53:33,514 - INFO - ==================================================
+2026-05-07 13:53:33,958 - INFO - Đang kết nối tới trình duyệt Chrome qua cổng 9222...
+2026-05-07 13:53:34,335 - INFO - Kết nối thành công!
+2026-05-07 13:53:34,336 - INFO - Đã tìm thấy 1 tabs đang mở.
+2026-05-07 13:53:34,336 - INFO - Đang dùng tab Pancake hiện tại: https://pancake.vn/941461145712453
+2026-05-07 13:53:34,336 - INFO - Đang chờ trang tải hoàn tất (5s)...
+2026-05-07 13:53:39,347 - INFO - Tìm danh sách đoạn chat trên sidebar...
+2026-05-07 13:53:39,443 - INFO - Tìm thấy 9 đoạn chat trên màn hình.
+2026-05-07 13:53:39,443 - INFO - --- Đang xử lý chat thứ 1/9 ---
+2026-05-07 13:53:40,232 - INFO - Đã click vào đoạn chat: Quách Ngọc 13:29 Tầm 3-4 ngày 
+2026-05-07 13:53:40,232 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:53:43,566 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_1.png
+2026-05-07 13:53:43,567 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:53:43,586 - INFO - Tên khách hàng: Quách Ngọc
+2026-05-07 13:53:43,586 - INFO - Số lượng tin nhắn lấy được: 91
+2026-05-07 13:53:43,589 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_1_Quách Ngọc.json
+2026-05-07 13:53:43,590 - INFO - --- Đang xử lý chat thứ 2/9 ---
+2026-05-07 13:53:44,289 - INFO - Đã click vào đoạn chat: Hoang Nguyen 12:20 Ok Kiểm hàn
+2026-05-07 13:53:44,289 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:53:47,471 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_2.png
+2026-05-07 13:53:47,471 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:53:47,482 - INFO - Tên khách hàng: Hoang Nguyen
+2026-05-07 13:53:47,482 - INFO - Số lượng tin nhắn lấy được: 93
+2026-05-07 13:53:47,484 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_2_Hoang Nguyen.json
+2026-05-07 13:53:47,484 - INFO - --- Đang xử lý chat thứ 3/9 ---
+2026-05-07 13:53:48,174 - INFO - Đã click vào đoạn chat: Sương Nguyễn 11:54 [Sticker] K
+2026-05-07 13:53:48,174 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:53:51,365 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_3.png
+2026-05-07 13:53:51,365 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:53:51,372 - INFO - Tên khách hàng: Sương Nguyễn
+2026-05-07 13:53:51,372 - INFO - Số lượng tin nhắn lấy được: 56
+2026-05-07 13:53:51,373 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_3_Sương Nguyễn.json
+2026-05-07 13:53:51,374 - INFO - --- Đang xử lý chat thứ 4/9 ---
+2026-05-07 13:53:52,047 - INFO - Đã click vào đoạn chat: Vu Chu 11:53 Tầm 3-4 ngày mình
+2026-05-07 13:53:52,047 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:53:55,276 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_4.png
+2026-05-07 13:53:55,276 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:53:55,288 - INFO - Tên khách hàng: Vu Chu
+2026-05-07 13:53:55,288 - INFO - Số lượng tin nhắn lấy được: 88
+2026-05-07 13:53:55,289 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_4_Vu Chu.json
+2026-05-07 13:53:55,289 - INFO - --- Đang xử lý chat thứ 5/9 ---
+2026-05-07 13:53:55,947 - INFO - Đã click vào đoạn chat: Nguyễn Nhung 11:43 Y như hình 
+2026-05-07 13:53:55,948 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:53:59,147 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_5.png
+2026-05-07 13:53:59,147 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:53:59,155 - INFO - Tên khách hàng: Nguyễn Nhung
+2026-05-07 13:53:59,155 - INFO - Số lượng tin nhắn lấy được: 62
+2026-05-07 13:53:59,156 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_5_Nguyễn Nhung.json
+2026-05-07 13:53:59,156 - INFO - --- Đang xử lý chat thứ 6/9 ---
+2026-05-07 13:53:59,850 - INFO - Đã click vào đoạn chat: Hoangminh Nguyen 11:34 Ơ sao g
+2026-05-07 13:53:59,850 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:54:03,042 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_6.png
+2026-05-07 13:54:03,042 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:54:03,051 - INFO - Tên khách hàng: Hoangminh Nguyen
+2026-05-07 13:54:03,051 - INFO - Số lượng tin nhắn lấy được: 56
+2026-05-07 13:54:03,052 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_6_Hoangminh Nguyen.json
+2026-05-07 13:54:03,052 - INFO - --- Đang xử lý chat thứ 7/9 ---
+2026-05-07 13:54:03,742 - INFO - Đã click vào đoạn chat: Thao Luong Thi 11:27 đơn của m
+2026-05-07 13:54:03,743 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:54:06,930 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_7.png
+2026-05-07 13:54:06,930 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:54:06,935 - INFO - Tên khách hàng: Thao Luong Thi
+2026-05-07 13:54:06,935 - INFO - Số lượng tin nhắn lấy được: 32
+2026-05-07 13:54:06,936 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_7_Thao Luong Thi.json
+2026-05-07 13:54:06,936 - INFO - --- Đang xử lý chat thứ 8/9 ---
+2026-05-07 13:54:07,607 - INFO - Đã click vào đoạn chat: Trịnh Tư 11:10 Tầm 3-4 ngày mì
+2026-05-07 13:54:07,607 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:54:10,843 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_8.png
+2026-05-07 13:54:10,843 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:54:10,853 - INFO - Tên khách hàng: Trịnh Tư
+2026-05-07 13:54:10,854 - INFO - Số lượng tin nhắn lấy được: 44
+2026-05-07 13:54:10,856 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_8_Trịnh Tư.json
+2026-05-07 13:54:10,857 - INFO - --- Đang xử lý chat thứ 9/9 ---
+2026-05-07 13:54:11,438 - INFO - Đã click vào đoạn chat: Trần Thị Chẽn 09:18 Tầm 3-4 ng
+2026-05-07 13:54:11,439 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 13:54:14,630 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_9.png
+2026-05-07 13:54:14,630 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 13:54:14,637 - INFO - Tên khách hàng: Trịnh Tư
+2026-05-07 13:54:14,637 - INFO - Số lượng tin nhắn lấy được: 44
+2026-05-07 13:54:14,638 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_9_Trịnh Tư.json
+2026-05-07 13:54:14,638 - INFO - ==================================================
+2026-05-07 13:54:14,638 - INFO -  HOÀN TẤT QUÉT TẤT CẢ ĐOẠN CHAT!
+2026-05-07 13:54:14,638 - INFO - ==================================================
+2026-05-07 14:03:55,439 - INFO - ==================================================
+2026-05-07 14:03:55,439 - INFO -  BẮT ĐẦU CHẠY TOOL LẤY DỮ LIỆU PANCAKE (V2 - CHỐNG LẶP, CÓ LỌC, SCROLL)
+2026-05-07 14:03:55,440 - INFO - ==================================================
+2026-05-07 14:03:55,830 - INFO - Đang kết nối tới trình duyệt Chrome qua cổng 9222...
+2026-05-07 14:03:56,195 - INFO - Kết nối thành công!
+2026-05-07 14:03:56,195 - INFO - Đã tìm thấy 1 tabs đang mở.
+2026-05-07 14:03:56,196 - INFO - Đang dùng tab Pancake hiện tại: https://pancake.vn/941461145712453
+2026-05-07 14:03:56,196 - INFO - Đang chờ trang tải hoàn tất (5s)...
+2026-05-07 14:04:01,208 - INFO - Kiểm tra bộ lọc 'Lọc kiểm hàng' (nút màu đen xám)...
+2026-05-07 14:04:01,292 - INFO - Đã chọn bộ lọc 'Lọc kiểm hàng', chờ danh sách cập nhật (3s)...
+2026-05-07 14:04:04,298 - INFO - Bắt đầu quét danh sách đoạn chat trên sidebar...
+2026-05-07 14:04:04,340 - INFO - --- Đang xử lý chat thứ 1 ---
+2026-05-07 14:04:05,046 - INFO - Đã click vào đoạn chat: Quách Ngọc 13:29 Tầm 3-4 ngày 
+2026-05-07 14:04:05,046 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:08,311 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_1.png
+2026-05-07 14:04:08,311 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:08,318 - INFO - Tên khách hàng: Quách Ngọc
+2026-05-07 14:04:08,318 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:04:08,320 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_1_Quách Ngọc.json
+2026-05-07 14:04:08,324 - INFO - --- Đang xử lý chat thứ 2 ---
+2026-05-07 14:04:09,000 - INFO - Đã click vào đoạn chat: Hoang Nguyen 12:20 Ok Kiểm hàn
+2026-05-07 14:04:09,000 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:12,198 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_2.png
+2026-05-07 14:04:12,198 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:12,203 - INFO - Tên khách hàng: Hoang Nguyen
+2026-05-07 14:04:12,203 - INFO - Số lượng tin nhắn lấy được: 24
+2026-05-07 14:04:12,204 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_2_Hoang Nguyen.json
+2026-05-07 14:04:12,208 - INFO - --- Đang xử lý chat thứ 3 ---
+2026-05-07 14:04:12,864 - INFO - Đã click vào đoạn chat: Sương Nguyễn 11:54 [Sticker] K
+2026-05-07 14:04:12,864 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:16,083 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_3.png
+2026-05-07 14:04:16,084 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:16,089 - INFO - Tên khách hàng: Sương Nguyễn
+2026-05-07 14:04:16,089 - INFO - Số lượng tin nhắn lấy được: 15
+2026-05-07 14:04:16,090 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_3_Sương Nguyễn.json
+2026-05-07 14:04:16,096 - INFO - --- Đang xử lý chat thứ 4 ---
+2026-05-07 14:04:16,769 - INFO - Đã click vào đoạn chat: Vu Chu 11:53 Tầm 3-4 ngày mình
+2026-05-07 14:04:16,769 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:19,968 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_4.png
+2026-05-07 14:04:19,968 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:19,976 - INFO - Tên khách hàng: Vu Chu
+2026-05-07 14:04:19,976 - INFO - Số lượng tin nhắn lấy được: 24
+2026-05-07 14:04:19,978 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_4_Vu Chu.json
+2026-05-07 14:04:19,987 - INFO - --- Đang xử lý chat thứ 5 ---
+2026-05-07 14:04:20,642 - INFO - Đã click vào đoạn chat: Nguyễn Nhung 11:43 Y như hình 
+2026-05-07 14:04:20,642 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:23,884 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_5.png
+2026-05-07 14:04:23,884 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:23,893 - INFO - Tên khách hàng: Nguyễn Nhung
+2026-05-07 14:04:23,893 - INFO - Số lượng tin nhắn lấy được: 16
+2026-05-07 14:04:23,894 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_5_Nguyễn Nhung.json
+2026-05-07 14:04:23,900 - INFO - --- Đang xử lý chat thứ 6 ---
+2026-05-07 14:04:24,580 - INFO - Đã click vào đoạn chat: Hoangminh Nguyen 11:34 Ơ sao g
+2026-05-07 14:04:24,580 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:27,777 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_6.png
+2026-05-07 14:04:27,778 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:27,783 - INFO - Tên khách hàng: Hoangminh Nguyen
+2026-05-07 14:04:27,783 - INFO - Số lượng tin nhắn lấy được: 14
+2026-05-07 14:04:27,784 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_6_Hoangminh Nguyen.json
+2026-05-07 14:04:27,788 - INFO - --- Đang xử lý chat thứ 7 ---
+2026-05-07 14:04:28,435 - INFO - Đã click vào đoạn chat: Thao Luong Thi 11:27 đơn của m
+2026-05-07 14:04:28,436 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:31,631 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_7.png
+2026-05-07 14:04:31,631 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:31,636 - INFO - Tên khách hàng: Thao Luong Thi
+2026-05-07 14:04:31,636 - INFO - Số lượng tin nhắn lấy được: 9
+2026-05-07 14:04:31,637 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_7_Thao Luong Thi.json
+2026-05-07 14:04:31,645 - INFO - --- Đang xử lý chat thứ 8 ---
+2026-05-07 14:04:32,305 - INFO - Đã click vào đoạn chat: Trịnh Tư 11:10 Tầm 3-4 ngày mì
+2026-05-07 14:04:32,305 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:35,496 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_8.png
+2026-05-07 14:04:35,496 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:35,500 - INFO - Tên khách hàng: Trịnh Tư
+2026-05-07 14:04:35,501 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:04:35,501 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_8_Trịnh Tư.json
+2026-05-07 14:04:35,505 - INFO - --- Đang xử lý chat thứ 9 ---
+2026-05-07 14:04:36,084 - INFO - Đã click vào đoạn chat: Lê Mỹ 11:06 Tầm 3-4 ngày mình 
+2026-05-07 14:04:36,084 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:39,300 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_9.png
+2026-05-07 14:04:39,300 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:39,304 - INFO - Tên khách hàng: Trịnh Tư
+2026-05-07 14:04:39,304 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:04:39,305 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_9_Trịnh Tư.json
+2026-05-07 14:04:41,331 - INFO - --- Đang xử lý chat thứ 10 ---
+2026-05-07 14:04:42,036 - INFO - Đã click vào đoạn chat: Trần Thu 10:40 Bạn có thể gọi 
+2026-05-07 14:04:42,036 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:45,229 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_10.png
+2026-05-07 14:04:45,229 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:45,234 - INFO - Tên khách hàng: Trần Thu
+2026-05-07 14:04:45,234 - INFO - Số lượng tin nhắn lấy được: 13
+2026-05-07 14:04:45,236 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_10_Trần Thu.json
+2026-05-07 14:04:45,242 - INFO - --- Đang xử lý chat thứ 11 ---
+2026-05-07 14:04:45,908 - INFO - Đã click vào đoạn chat: Ngoc Phuong 09:58 Tầm 3-4 ngày
+2026-05-07 14:04:45,908 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:49,102 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_11.png
+2026-05-07 14:04:49,102 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:49,108 - INFO - Tên khách hàng: Ngoc Phuong
+2026-05-07 14:04:49,108 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:04:49,109 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_11_Ngoc Phuong.json
+2026-05-07 14:04:49,119 - INFO - --- Đang xử lý chat thứ 12 ---
+2026-05-07 14:04:49,813 - INFO - Đã click vào đoạn chat: Trần Thị Chẽn 09:18 Tầm 3-4 ng
+2026-05-07 14:04:49,813 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:53,020 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_12.png
+2026-05-07 14:04:53,020 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:53,025 - INFO - Tên khách hàng: Trần Thị Chẽn
+2026-05-07 14:04:53,025 - INFO - Số lượng tin nhắn lấy được: 8
+2026-05-07 14:04:53,026 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_12_Trần Thị Chẽn.json
+2026-05-07 14:04:53,030 - INFO - --- Đang xử lý chat thứ 13 ---
+2026-05-07 14:04:53,705 - INFO - Đã click vào đoạn chat: Bui Thẩm 08:52 Tầm 3-4 ngày mì
+2026-05-07 14:04:53,705 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:04:56,917 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_13.png
+2026-05-07 14:04:56,917 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:04:56,923 - INFO - Tên khách hàng: Bui Thẩm
+2026-05-07 14:04:56,924 - INFO - Số lượng tin nhắn lấy được: 13
+2026-05-07 14:04:56,925 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_13_Bui Thẩm.json
+2026-05-07 14:04:56,932 - INFO - --- Đang xử lý chat thứ 14 ---
+2026-05-07 14:04:57,587 - INFO - Đã click vào đoạn chat: Nguyễn Thơ 07:42 Tầm 3-4 ngày 
+2026-05-07 14:04:57,587 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:00,778 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_14.png
+2026-05-07 14:05:00,778 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:00,782 - INFO - Tên khách hàng: Nguyễn Thơ
+2026-05-07 14:05:00,782 - INFO - Số lượng tin nhắn lấy được: 10
+2026-05-07 14:05:00,783 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_14_Nguyễn Thơ.json
+2026-05-07 14:05:00,788 - INFO - --- Đang xử lý chat thứ 15 ---
+2026-05-07 14:05:01,447 - INFO - Đã click vào đoạn chat: Bà Nội Bà Ngoại 07:40 Tầm 3-4 
+2026-05-07 14:05:01,447 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:04,653 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_15.png
+2026-05-07 14:05:04,653 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:04,659 - INFO - Tên khách hàng: Bà Nội Bà Ngoại
+2026-05-07 14:05:04,659 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:05:04,660 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_15_Bà Nội Bà Ngoại.json
+2026-05-07 14:05:04,666 - INFO - --- Đang xử lý chat thứ 16 ---
+2026-05-07 14:05:05,336 - INFO - Đã click vào đoạn chat: Trần Thị Bê 07:30 Ok Kiểm hàng
+2026-05-07 14:05:05,336 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:08,551 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_16.png
+2026-05-07 14:05:08,551 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:08,556 - INFO - Tên khách hàng: Trần Thị Bê
+2026-05-07 14:05:08,557 - INFO - Số lượng tin nhắn lấy được: 16
+2026-05-07 14:05:08,557 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_16_Trần Thị Bê.json
+2026-05-07 14:05:08,563 - INFO - --- Đang xử lý chat thứ 17 ---
+2026-05-07 14:05:09,214 - INFO - Đã click vào đoạn chat: Đỗ Hoa 06:50 Tầm 3-4 ngày mình
+2026-05-07 14:05:09,214 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:12,411 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_17.png
+2026-05-07 14:05:12,411 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:12,417 - INFO - Tên khách hàng: Đỗ Hoa
+2026-05-07 14:05:12,417 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:05:12,418 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_17_Đỗ Hoa.json
+2026-05-07 14:05:12,431 - INFO - --- Đang xử lý chat thứ 18 ---
+2026-05-07 14:05:13,007 - INFO - Đã click vào đoạn chat: Hoa Vũ 06:10 3 hộp là 240k miễ
+2026-05-07 14:05:13,008 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:16,253 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_18.png
+2026-05-07 14:05:16,254 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:16,259 - INFO - Tên khách hàng: Đỗ Hoa
+2026-05-07 14:05:16,260 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:05:16,261 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_18_Đỗ Hoa.json
+2026-05-07 14:05:16,265 - INFO - --- Đang xử lý chat thứ 19 ---
+2026-05-07 14:05:16,833 - INFO - Đã click vào đoạn chat: Ngọc Liễu 10:08 Vâng ạ Mua hàn
+2026-05-07 14:05:16,833 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:20,077 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_19.png
+2026-05-07 14:05:20,077 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:20,082 - INFO - Tên khách hàng: Đỗ Hoa
+2026-05-07 14:05:20,082 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:05:20,083 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_19_Đỗ Hoa.json
+2026-05-07 14:05:22,109 - INFO - --- Đang xử lý chat thứ 20 ---
+2026-05-07 14:05:22,672 - INFO - Đã click vào đoạn chat: Thu Huyền 10:32 Thôi toàn là n
+2026-05-07 14:05:22,672 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:25,884 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_20.png
+2026-05-07 14:05:25,884 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:25,888 - INFO - Tên khách hàng: Đỗ Hoa
+2026-05-07 14:05:25,888 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:05:25,889 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_20_Đỗ Hoa.json
+2026-05-07 14:05:25,897 - INFO - --- Đang xử lý chat thứ 21 ---
+2026-05-07 14:05:26,570 - INFO - Đã click vào đoạn chat: Trần Thị Chẽn 09:14 Cho hai hộ
+2026-05-07 14:05:26,570 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:29,765 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_21.png
+2026-05-07 14:05:29,765 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:29,769 - INFO - Tên khách hàng: Trần Thị Chẽn
+2026-05-07 14:05:29,769 - INFO - Số lượng tin nhắn lấy được: 0
+2026-05-07 14:05:29,770 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_21_Trần Thị Chẽn.json
+2026-05-07 14:05:29,776 - INFO - --- Đang xử lý chat thứ 22 ---
+2026-05-07 14:05:30,477 - INFO - Đã click vào đoạn chat: Lê Thanh 09:07 [Attachment] Mu
+2026-05-07 14:05:30,477 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:33,672 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_22.png
+2026-05-07 14:05:33,673 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:33,678 - INFO - Tên khách hàng: Lê Thanh
+2026-05-07 14:05:33,678 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:05:33,679 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_22_Lê Thanh.json
+2026-05-07 14:05:33,685 - INFO - --- Đang xử lý chat thứ 23 ---
+2026-05-07 14:05:34,366 - INFO - Đã click vào đoạn chat: Nguyễn Thơ 07:42 Tầm 3-4 ngày 
+2026-05-07 14:05:34,366 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:37,571 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_23.png
+2026-05-07 14:05:37,572 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:37,576 - INFO - Tên khách hàng: Nguyễn Thơ
+2026-05-07 14:05:37,576 - INFO - Số lượng tin nhắn lấy được: 10
+2026-05-07 14:05:37,577 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_23_Nguyễn Thơ.json
+2026-05-07 14:05:37,581 - INFO - --- Đang xử lý chat thứ 24 ---
+2026-05-07 14:05:38,224 - INFO - Đã click vào đoạn chat: Bà Nội Bà Ngoại 07:40 Tầm 3-4 
+2026-05-07 14:05:38,224 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:41,421 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_24.png
+2026-05-07 14:05:41,421 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:41,440 - INFO - Tên khách hàng: Bà Nội Bà Ngoại
+2026-05-07 14:05:41,440 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:05:41,442 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_24_Bà Nội Bà Ngoại.json
+2026-05-07 14:05:41,450 - INFO - --- Đang xử lý chat thứ 25 ---
+2026-05-07 14:05:42,128 - INFO - Đã click vào đoạn chat: Trần Thị Bê 07:30 Ok Kiểm hàng
+2026-05-07 14:05:42,128 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:45,323 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_25.png
+2026-05-07 14:05:45,323 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:45,328 - INFO - Tên khách hàng: Trần Thị Bê
+2026-05-07 14:05:45,328 - INFO - Số lượng tin nhắn lấy được: 16
+2026-05-07 14:05:45,329 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_25_Trần Thị Bê.json
+2026-05-07 14:05:45,333 - INFO - --- Đang xử lý chat thứ 26 ---
+2026-05-07 14:05:46,034 - INFO - Đã click vào đoạn chat: Kiều Tiến Đạt 06:51 Alo
+2026-05-07 14:05:46,034 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:49,209 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_26.png
+2026-05-07 14:05:49,209 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:49,213 - INFO - Tên khách hàng: Kiều Tiến Đạt
+2026-05-07 14:05:49,214 - INFO - Số lượng tin nhắn lấy được: 8
+2026-05-07 14:05:49,214 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_26_Kiều Tiến Đạt.json
+2026-05-07 14:05:49,219 - INFO - --- Đang xử lý chat thứ 27 ---
+2026-05-07 14:05:49,786 - INFO - Đã click vào đoạn chat: Đỗ Hoa 06:50 Tầm 3-4 ngày mình
+2026-05-07 14:05:49,786 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:05:52,950 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_27.png
+2026-05-07 14:05:52,950 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:05:52,954 - INFO - Tên khách hàng: Kiều Tiến Đạt
+2026-05-07 14:05:52,954 - INFO - Số lượng tin nhắn lấy được: 8
+2026-05-07 14:05:52,955 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_27_Kiều Tiến Đạt.json
+2026-05-07 14:06:24,982 - INFO - --- Đang xử lý chat thứ 28 ---
+2026-05-07 14:06:25,620 - INFO - Đã click vào đoạn chat: Nguyễn Diệp 06:30 Tầm 3-4 ngày
+2026-05-07 14:06:25,621 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:06:28,831 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_28.png
+2026-05-07 14:06:28,832 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:06:28,836 - INFO - Tên khách hàng: Nguyễn Diệp
+2026-05-07 14:06:28,836 - INFO - Số lượng tin nhắn lấy được: 10
+2026-05-07 14:06:28,837 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_28_Nguyễn Diệp.json
+2026-05-07 14:06:28,842 - INFO - --- Đang xử lý chat thứ 29 ---
+2026-05-07 14:06:29,523 - INFO - Đã click vào đoạn chat: Hoa Vũ 06:10 3 hộp là 240k miễ
+2026-05-07 14:06:29,524 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:06:32,710 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_29.png
+2026-05-07 14:06:32,710 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:06:32,714 - INFO - Tên khách hàng: Hoa Vũ
+2026-05-07 14:06:32,714 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:06:32,715 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_29_Hoa Vũ.json
+2026-05-07 14:06:32,726 - INFO - --- Đang xử lý chat thứ 30 ---
+2026-05-07 14:06:33,388 - INFO - Đã click vào đoạn chat: Thanh Kim 06:04 Chị ơi
+2026-05-07 14:06:33,388 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:06:36,583 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_30.png
+2026-05-07 14:06:36,583 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:06:36,588 - INFO - Tên khách hàng: Thanh Kim
+2026-05-07 14:06:36,588 - INFO - Số lượng tin nhắn lấy được: 9
+2026-05-07 14:06:36,589 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_30_Thanh Kim.json
+2026-05-07 14:06:36,593 - INFO - --- Đang xử lý chat thứ 31 ---
+2026-05-07 14:06:37,231 - INFO - Đã click vào đoạn chat: Hiểu Lê 06:04 3 hộp là 240k mi
+2026-05-07 14:06:37,231 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:06:40,467 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_31.png
+2026-05-07 14:06:40,467 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:06:40,472 - INFO - Tên khách hàng: Hiểu Lê
+2026-05-07 14:06:40,472 - INFO - Số lượng tin nhắn lấy được: 2
+2026-05-07 14:06:40,473 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_31_Hiểu Lê.json
+2026-05-07 14:06:40,479 - INFO - --- Đang xử lý chat thứ 32 ---
+2026-05-07 14:06:41,132 - INFO - Đã click vào đoạn chat: Trần Thị Chẽn 09:18 Tầm 3-4 ng
+2026-05-07 14:06:41,133 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:06:44,374 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_32.png
+2026-05-07 14:06:44,374 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:06:44,381 - INFO - Tên khách hàng: Trần Thị Chẽn
+2026-05-07 14:06:44,381 - INFO - Số lượng tin nhắn lấy được: 8
+2026-05-07 14:06:44,381 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_32_Trần Thị Chẽn.json
+2026-05-07 14:06:44,385 - INFO - --- Đang xử lý chat thứ 33 ---
+2026-05-07 14:06:45,067 - INFO - Đã click vào đoạn chat: Trịnh Tư 11:10 Tầm 3-4 ngày mì
+2026-05-07 14:06:45,067 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:06:48,280 - INFO - Đã lưu ảnh màn hình: F:\tool_cao_data\logs\2026-05-07\screenshot_chat_33.png
+2026-05-07 14:06:48,280 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:06:48,284 - INFO - Tên khách hàng: Trịnh Tư
+2026-05-07 14:06:48,285 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:06:48,286 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_33_Trịnh Tư.json
+2026-05-07 14:06:48,293 - INFO - --- Đang xử lý chat thứ 34 ---
+2026-05-07 14:06:48,968 - INFO - Đã click vào đoạn chat: Thach Tiếp 11:10 Ok Kiểm hàng
+2026-05-07 14:06:48,969 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:17,410 - INFO - ==================================================
+2026-05-07 14:14:17,411 - INFO -  BẮT ĐẦU CHẠY TOOL LẤY DỮ LIỆU PANCAKE (V2 - CHỐNG LẶP, CÓ LỌC, SCROLL)
+2026-05-07 14:14:17,411 - INFO - ==================================================
+2026-05-07 14:14:17,789 - INFO - Đang kết nối tới trình duyệt Chrome qua cổng 9222...
+2026-05-07 14:14:18,196 - INFO - Kết nối thành công!
+2026-05-07 14:14:18,196 - INFO - Đã tìm thấy 2 tabs đang mở.
+2026-05-07 14:14:18,196 - INFO - Đang dùng tab Pancake hiện tại: https://pancake.vn/941461145712453
+2026-05-07 14:14:18,197 - INFO - Đang chờ trang tải hoàn tất (5s)...
+2026-05-07 14:14:23,215 - INFO - Kiểm tra bộ lọc (nút hình vuông màu xám)...
+2026-05-07 14:14:23,224 - INFO - Bộ lọc đã được chọn sẵn từ trước.
+2026-05-07 14:14:23,224 - INFO - Bắt đầu quét danh sách đoạn chat trên sidebar...
+2026-05-07 14:14:23,263 - INFO - --- Đang xử lý chat thứ 1 ---
+2026-05-07 14:14:23,963 - INFO - Đã click vào đoạn chat: 1 Vinh Bui Hong 14:11 [Sticker
+2026-05-07 14:14:23,963 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:26,982 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:26,988 - INFO - Tên khách hàng: Vinh Bui Hong
+2026-05-07 14:14:26,989 - INFO - Số lượng tin nhắn lấy được: 13
+2026-05-07 14:14:26,989 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_1_Vinh Bui Hong.json
+2026-05-07 14:14:26,994 - INFO - --- Đang xử lý chat thứ 2 ---
+2026-05-07 14:14:27,633 - INFO - Đã click vào đoạn chat: Vinh Bui Hong 14:11 [Sticker] 
+2026-05-07 14:14:27,633 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:30,638 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:30,642 - INFO - Tên khách hàng: Đỗ Thái
+2026-05-07 14:14:30,642 - INFO - Số lượng tin nhắn lấy được: 10
+2026-05-07 14:14:30,643 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_2_Đỗ Thái.json
+2026-05-07 14:14:30,647 - INFO - --- Đang xử lý chat thứ 3 ---
+2026-05-07 14:14:31,306 - INFO - Đã click vào đoạn chat: Minh Lê 14:02 Tầm 3-4 ngày mìn
+2026-05-07 14:14:31,307 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:34,320 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:34,325 - INFO - Tên khách hàng: Minh Lê
+2026-05-07 14:14:34,325 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:14:34,326 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_3_Minh Lê.json
+2026-05-07 14:14:34,330 - INFO - --- Đang xử lý chat thứ 4 ---
+2026-05-07 14:14:34,968 - INFO - Đã click vào đoạn chat: Quách Ngọc 13:29 Tầm 3-4 ngày 
+2026-05-07 14:14:34,969 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:37,971 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:37,978 - INFO - Tên khách hàng: Quách Ngọc
+2026-05-07 14:14:37,978 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:14:37,979 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_4_Quách Ngọc.json
+2026-05-07 14:14:37,985 - INFO - --- Đang xử lý chat thứ 5 ---
+2026-05-07 14:14:38,638 - INFO - Đã click vào đoạn chat: Hoang Nguyen 12:20 Ok Kiểm hàn
+2026-05-07 14:14:38,639 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:41,653 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:41,659 - INFO - Tên khách hàng: Hoang Nguyen
+2026-05-07 14:14:41,659 - INFO - Số lượng tin nhắn lấy được: 24
+2026-05-07 14:14:41,660 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_5_Hoang Nguyen.json
+2026-05-07 14:14:41,664 - INFO - --- Đang xử lý chat thứ 6 ---
+2026-05-07 14:14:42,279 - INFO - Đã click vào đoạn chat: Sương Nguyễn 11:54 [Sticker] K
+2026-05-07 14:14:42,279 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:45,288 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:45,293 - INFO - Tên khách hàng: Sương Nguyễn
+2026-05-07 14:14:45,293 - INFO - Số lượng tin nhắn lấy được: 15
+2026-05-07 14:14:45,294 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_6_Sương Nguyễn.json
+2026-05-07 14:14:45,298 - INFO - --- Đang xử lý chat thứ 7 ---
+2026-05-07 14:14:45,928 - INFO - Đã click vào đoạn chat: Vu Chu 11:53 Tầm 3-4 ngày mình
+2026-05-07 14:14:45,928 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:48,939 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:48,944 - INFO - Tên khách hàng: Vu Chu
+2026-05-07 14:14:48,944 - INFO - Số lượng tin nhắn lấy được: 24
+2026-05-07 14:14:48,945 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_7_Vu Chu.json
+2026-05-07 14:14:50,967 - INFO - --- Đang xử lý chat thứ 8 ---
+2026-05-07 14:14:51,593 - INFO - Đã click vào đoạn chat: Thao Luong Thi 11:27 đơn của m
+2026-05-07 14:14:51,593 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:54,597 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:54,601 - INFO - Tên khách hàng: Thao Luong Thi
+2026-05-07 14:14:54,601 - INFO - Số lượng tin nhắn lấy được: 9
+2026-05-07 14:14:54,602 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_8_Thao Luong Thi.json
+2026-05-07 14:14:54,606 - INFO - --- Đang xử lý chat thứ 9 ---
+2026-05-07 14:14:55,230 - INFO - Đã click vào đoạn chat: Trịnh Tư 11:10 Tầm 3-4 ngày mì
+2026-05-07 14:14:55,230 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:14:58,242 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:14:58,248 - INFO - Tên khách hàng: Trịnh Tư
+2026-05-07 14:14:58,248 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:14:58,249 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_9_Trịnh Tư.json
+2026-05-07 14:14:58,254 - INFO - --- Đang xử lý chat thứ 10 ---
+2026-05-07 14:14:58,882 - INFO - Đã click vào đoạn chat: Thach Tiếp 11:10 Ok Kiểm hàng
+2026-05-07 14:14:58,882 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:01,898 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:01,902 - INFO - Tên khách hàng: Thach Tiếp
+2026-05-07 14:15:01,902 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:15:01,902 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_10_Thach Tiếp.json
+2026-05-07 14:15:01,906 - INFO - --- Đang xử lý chat thứ 11 ---
+2026-05-07 14:15:02,523 - INFO - Đã click vào đoạn chat: Lê Mỹ 11:06 Tầm 3-4 ngày mình 
+2026-05-07 14:15:02,523 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:05,531 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:05,535 - INFO - Tên khách hàng: Lê Mỹ
+2026-05-07 14:15:05,535 - INFO - Số lượng tin nhắn lấy được: 14
+2026-05-07 14:15:05,536 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_11_Lê Mỹ.json
+2026-05-07 14:15:05,540 - INFO - --- Đang xử lý chat thứ 12 ---
+2026-05-07 14:15:06,175 - INFO - Đã click vào đoạn chat: Trần Thu 10:40 Bạn có thể gọi 
+2026-05-07 14:15:06,175 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:09,180 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:09,185 - INFO - Tên khách hàng: Trần Thu
+2026-05-07 14:15:09,185 - INFO - Số lượng tin nhắn lấy được: 13
+2026-05-07 14:15:09,186 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_12_Trần Thu.json
+2026-05-07 14:15:09,189 - INFO - --- Đang xử lý chat thứ 13 ---
+2026-05-07 14:15:09,831 - INFO - Đã click vào đoạn chat: Ngoc Phuong 09:58 Tầm 3-4 ngày
+2026-05-07 14:15:09,831 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:12,842 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:12,845 - INFO - Tên khách hàng: Ngoc Phuong
+2026-05-07 14:15:12,845 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:15:12,846 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_13_Ngoc Phuong.json
+2026-05-07 14:15:12,850 - INFO - --- Đang xử lý chat thứ 14 ---
+2026-05-07 14:15:13,508 - INFO - Đã click vào đoạn chat: Trần Thị Chẽn 09:18 Tầm 3-4 ng
+2026-05-07 14:15:13,509 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:16,524 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:16,527 - INFO - Tên khách hàng: Trần Thị Chẽn
+2026-05-07 14:15:16,528 - INFO - Số lượng tin nhắn lấy được: 8
+2026-05-07 14:15:16,528 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_14_Trần Thị Chẽn.json
+2026-05-07 14:15:16,532 - INFO - --- Đang xử lý chat thứ 15 ---
+2026-05-07 14:15:17,170 - INFO - Đã click vào đoạn chat: Bui Thẩm 08:52 Tầm 3-4 ngày mì
+2026-05-07 14:15:17,171 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:20,173 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:20,177 - INFO - Tên khách hàng: Bui Thẩm
+2026-05-07 14:15:20,177 - INFO - Số lượng tin nhắn lấy được: 13
+2026-05-07 14:15:20,178 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_15_Bui Thẩm.json
+2026-05-07 14:15:20,181 - INFO - --- Đang xử lý chat thứ 16 ---
+2026-05-07 14:15:20,737 - INFO - Đã click vào đoạn chat: Bà Nội Bà Ngoại 07:40 Tầm 3-4 
+2026-05-07 14:15:20,738 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:23,751 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:23,755 - INFO - Tên khách hàng: Bui Thẩm
+2026-05-07 14:15:23,755 - INFO - Số lượng tin nhắn lấy được: 13
+2026-05-07 14:15:23,756 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_16_Bui Thẩm.json
+2026-05-07 14:15:55,800 - INFO - --- Đang xử lý chat thứ 17 ---
+2026-05-07 14:15:56,347 - INFO - Đã click vào đoạn chat: Nguyễn Thơ 07:42 Tầm 3-4 ngày 
+2026-05-07 14:15:56,347 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:15:59,358 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:15:59,362 - INFO - Tên khách hàng: Bui Thẩm
+2026-05-07 14:15:59,362 - INFO - Số lượng tin nhắn lấy được: 13
+2026-05-07 14:15:59,363 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_17_Bui Thẩm.json
+2026-05-07 14:15:59,370 - INFO - --- Đang xử lý chat thứ 18 ---
+2026-05-07 14:16:00,007 - INFO - Đã click vào đoạn chat: Trần Thị Bê 07:30 Ok Kiểm hàng
+2026-05-07 14:16:00,007 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:16:03,018 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:16:03,022 - INFO - Tên khách hàng: Trần Thị Bê
+2026-05-07 14:16:03,022 - INFO - Số lượng tin nhắn lấy được: 16
+2026-05-07 14:16:03,023 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_18_Trần Thị Bê.json
+2026-05-07 14:16:03,027 - INFO - --- Đang xử lý chat thứ 19 ---
+2026-05-07 14:16:03,667 - INFO - Đã click vào đoạn chat: Đỗ Hoa 06:50 Tầm 3-4 ngày mình
+2026-05-07 14:16:03,667 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:16:06,675 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:16:06,680 - INFO - Tên khách hàng: Đỗ Hoa
+2026-05-07 14:16:06,680 - INFO - Số lượng tin nhắn lấy được: 25
+2026-05-07 14:16:06,681 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_19_Đỗ Hoa.json
+2026-05-07 14:16:06,685 - INFO - --- Đang xử lý chat thứ 20 ---
+2026-05-07 14:16:07,362 - INFO - Đã click vào đoạn chat: Nguyễn Diệp 06:30 Tầm 3-4 ngày
+2026-05-07 14:16:07,362 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:16:10,368 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:16:10,372 - INFO - Tên khách hàng: Nguyễn Diệp
+2026-05-07 14:16:10,372 - INFO - Số lượng tin nhắn lấy được: 10
+2026-05-07 14:16:10,373 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_20_Nguyễn Diệp.json
+2026-05-07 14:16:10,377 - INFO - --- Đang xử lý chat thứ 21 ---
+2026-05-07 14:16:11,017 - INFO - Đã click vào đoạn chat: Hoa Vũ 06:10 3 hộp là 240k miễ
+2026-05-07 14:16:11,017 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:16:14,043 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:16:14,047 - INFO - Tên khách hàng: Hoa Vũ
+2026-05-07 14:16:14,047 - INFO - Số lượng tin nhắn lấy được: 12
+2026-05-07 14:16:14,048 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_21_Hoa Vũ.json
+2026-05-07 14:16:14,051 - INFO - --- Đang xử lý chat thứ 22 ---
+2026-05-07 14:16:14,807 - INFO - Đã click vào đoạn chat: Nguyễn Thanh Hồng 04:55 [Photo
+2026-05-07 14:16:14,807 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:16:17,812 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:16:17,817 - INFO - Tên khách hàng: Nguyễn Thanh Hồng
+2026-05-07 14:16:17,817 - INFO - Số lượng tin nhắn lấy được: 8
+2026-05-07 14:16:17,818 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_22_Nguyễn Thanh Hồng.json
+2026-05-07 14:16:17,822 - INFO - --- Đang xử lý chat thứ 23 ---
+2026-05-07 14:16:18,508 - INFO - Đã click vào đoạn chat: Uyen Tu 04:54 Tầm 3-4 ngày mìn
+2026-05-07 14:16:18,508 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:16:21,524 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:16:21,528 - INFO - Tên khách hàng: Uyen Tu
+2026-05-07 14:16:21,528 - INFO - Số lượng tin nhắn lấy được: 9
+2026-05-07 14:16:21,528 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_23_Uyen Tu.json
+2026-05-07 14:16:23,576 - INFO - --- Đang xử lý chat thứ 24 ---
+2026-05-07 14:16:24,206 - INFO - Đã click vào đoạn chat: Lý Lâm 14:59 hôm qua Em gửi về
+2026-05-07 14:16:24,207 - INFO - Chờ nội dung chat load (3s)...
+2026-05-07 14:16:27,213 - INFO - Đang trích xuất dữ liệu chat...
+2026-05-07 14:16:27,218 - INFO - Tên khách hàng: Lý Lâm
+2026-05-07 14:16:27,218 - INFO - Số lượng tin nhắn lấy được: 11
+2026-05-07 14:16:27,219 - INFO - Đã lưu JSON tại: F:\tool_cao_data\data\2026-05-07_24_Lý Lâm.json
+2026-05-07 14:16:29,261 - INFO - Không tìm thấy chat mới, đang thử cuộn xuống... (lần 1/3)
+2026-05-07 14:16:31,317 - INFO - Không tìm thấy chat mới, đang thử cuộn xuống... (lần 2/3)
+2026-05-07 14:16:33,356 - INFO - Không tìm thấy chat mới, đang thử cuộn xuống... (lần 3/3)
+2026-05-07 14:16:35,374 - INFO - ==================================================
+2026-05-07 14:16:35,374 - INFO -  HOÀN TẤT QUÉT TẤT CẢ ĐOẠN CHAT! Tổng số: 24
+2026-05-07 14:16:35,374 - INFO - ==================================================
