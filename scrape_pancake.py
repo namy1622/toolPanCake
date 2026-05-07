@@ -30,6 +30,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+import subprocess
+
 async def main():
     logger.info("=" * 50)
     logger.info(" BẮT ĐẦU CHẠY TOOL LẤY DỮ LIỆU PANCAKE (V2 - CHỐNG LẶP, CÓ LỌC, SCROLL)")
@@ -41,8 +43,28 @@ async def main():
             browser = await p.chromium.connect_over_cdp(f"http://localhost:{DEBUG_PORT}")
             logger.info("Kết nối thành công!")
         except Exception as e:
-            logger.error(f"Không thể kết nối tới Chrome: {e}")
-            return
+            logger.warning(f"Chưa mở Chrome hoặc lỗi kết nối. Đang tự động gọi lệnh mở Chrome...")
+            
+            chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+            user_data_dir = r"F:\ToolPancake\chrome_debug_profile"
+            
+            try:
+                # Mở Chrome dưới dạng process độc lập
+                subprocess.Popen([
+                    chrome_path,
+                    f'--user-data-dir={user_data_dir}',
+                    f'--remote-debugging-port={DEBUG_PORT}',
+                    PANCAKE_URL
+                ])
+                logger.info("Đã phát lệnh mở Chrome. Vui lòng chờ 5 giây để Chrome khởi động...")
+                await asyncio.sleep(5)
+                
+                # Thử kết nối lại lần 2
+                browser = await p.chromium.connect_over_cdp(f"http://localhost:{DEBUG_PORT}")
+                logger.info("Kết nối thành công sau khi tự động mở trình duyệt!")
+            except Exception as e2:
+                logger.error(f"Vẫn không thể kết nối tới Chrome sau khi thử mở. Vui lòng tự mở tay. Chi tiết lỗi: {e2}")
+                return
 
         contexts = browser.contexts
         if not contexts:
@@ -66,6 +88,8 @@ async def main():
             await page.goto(PANCAKE_URL, wait_until='domcontentloaded', timeout=30000)
         else:
             logger.info(f"Đang dùng tab Pancake hiện tại: {page.url}")
+            logger.info("Tiến hành reload (tải lại) trang web...")
+            await page.reload(wait_until='domcontentloaded', timeout=30000)
         
         logger.info("Đang chờ trang tải hoàn tất (5s)...")
         await page.wait_for_timeout(5000)
@@ -125,19 +149,12 @@ async def main():
                 logger.info(f"--- Đang xử lý chat thứ {chat_index} ---")
                 
                 try:
-                    # Cuộn tới phần tử để chắc chắn click được
-                    await locator.scroll_into_view_if_needed()
-                    await page.wait_for_timeout(500)
-                    
-                    # Click thông qua tọa độ
-                    box = await locator.bounding_box()
-                    if box:
-                        await page.mouse.click(box['x'] + box['width'] / 2, box['y'] + box['height'] / 2)
-                    else:
-                        await locator.click(force=True)
-                    
-                    # Lấy text ngắn để hiển thị log
+                    # Lấy text ngắn để hiển thị log trước
                     text = await locator.inner_text()
+                    
+                    # Dùng JS click thẳng vào DOM để không tự động cuộn (tránh làm hỏng index của danh sách ảo)
+                    await locator.evaluate('el => { const target = el.querySelector(".media-body") || el; target.click(); }')
+                    
                     logger.info(f"Đã click vào đoạn chat: {text[:30].replace(chr(10), ' ')}")
                 except Exception as e:
                     logger.warning(f"Lỗi khi click đoạn chat {chat_index}: {e}")
@@ -221,6 +238,24 @@ async def main():
                     json.dump(output_data, f, ensure_ascii=False, indent=2)
 
                 logger.info(f"Đã lưu JSON tại: {json_filename}")
+
+                # BẤM TAG "Mua hàng" SAU KHI LẤY DATA
+                logger.info("Đang gắn tag 'Mua hàng'...")
+                clicked_tag = await page.evaluate('''() => {
+                    const btns = Array.from(document.querySelectorAll('#listShowTags .btn-tag-item'));
+                    const muaHangBtn = btns.find(b => b.textContent.trim().toLowerCase() === 'mua hàng');
+                    if (muaHangBtn) {
+                        muaHangBtn.click();
+                        return true;
+                    }
+                    return false;
+                }''')
+                
+                if clicked_tag:
+                    logger.info("Đã bấm gắn tag 'Mua hàng' thành công.")
+                    await page.wait_for_timeout(1000) # Đợi 1s để hệ thống lưu tag trước khi sang chat khác
+                else:
+                    logger.warning("Không tìm thấy nút tag 'Mua hàng' trên giao diện.")
 
             if new_chats_in_this_view == 0:
                 # Nếu không tìm thấy chat mới nào trên màn hình, thử cuộn xuống và đếm số lần thử
