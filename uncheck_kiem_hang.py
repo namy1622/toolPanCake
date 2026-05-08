@@ -93,111 +93,129 @@ async def main():
         else:
             logger.warning("Không tìm thấy bộ lọc hình vuông trên màn hình.")
 
-        # 2. VÒNG LẶP SCROLL VÀ KIỂM TRA BỎ TAG
+        # 2. VÒNG LẶP XỬ LÝ TỪNG CHAT TRÊN SIDEBAR
+        # LOGIC QUAN TRỌNG:
+        # - Khi bỏ tích "Kiểm hàng" thành công → chat đó BIẾN MẤT khỏi sidebar (vì không còn khớp bộ lọc)
+        #   → sidebar TỰ ĐỘNG chọn chat tiếp theo → KHÔNG cần click thêm gì.
+        # - Khi BỎ QUA (skip) chat → chat đó VẪN CÒN trên sidebar → phải TỰ TAY click chat tiếp theo bên dưới.
         logger.info("Bắt đầu quét danh sách đoạn chat trên sidebar...")
         
-        processed_chat_ids = set()
-        scroll_attempts = 0
         chat_index = 0
+        unchecked_count = 0
+        skipped_count = 0
+        no_more_chat_attempts = 0
+        # skip_offset: Số chat đã bỏ qua (vẫn còn trên sidebar).
+        # Dùng để biết cần click vào chat ở vị trí nào.
+        # Ví dụ: skip_offset=0 → click chat đầu tiên (index 0)
+        #         skip_offset=2 → đã bỏ qua 2 chat phía trên, click chat ở index 2
+        skip_offset = 0
 
-        while scroll_attempts < 3:
+        while no_more_chat_attempts < 3:
+            # Lấy danh sách chat hiện tại trên sidebar
             chat_locators = page.locator('.conversation-list-item')
             count = await chat_locators.count()
-            new_chats_in_this_view = 0
             
-            for i in range(count):
-                locator = chat_locators.nth(i)
-                try:
-                    chat_id = await locator.get_attribute('id')
-                except Exception:
-                    continue
-                    
-                if not chat_id or chat_id in processed_chat_ids:
-                    continue
-                    
-                processed_chat_ids.add(chat_id)
-                new_chats_in_this_view += 1
-                chat_index += 1
-                
-                logger.info(f"--- Đang xử lý chat thứ {chat_index} ---")
-                
-                try:
-                    text = await locator.inner_text()
-                    await locator.evaluate('el => { const target = el.querySelector(".media-body") || el; target.click(); }')
-                    logger.info(f"Đã click vào đoạn chat: {text[:30].replace(chr(10), ' ')}")
-                except Exception as e:
-                    logger.warning(f"Lỗi khi click đoạn chat {chat_index}: {e}")
-                    continue
-
-                # Chờ nội dung chat bên phải load
-                await page.wait_for_timeout(2000)
-
-                # KIỂM TRA VÀ BỎ TAG KIỂM HÀNG
-                logger.info("Kiểm tra điều kiện tag 'Mua hàng' và 'Kiểm hàng'...")
-                
-                # Logic: Nút tag đang hoạt động thường có một chấm ellipse bên trong 
-                # hoặc màu không chứa độ trong suốt (không có rgba(..., 0.4)).
-                tag_status = await page.evaluate('''() => {
-                    const btns = Array.from(document.querySelectorAll('#listShowTags .btn-tag-item'));
-                    
-                    const muaHangBtn = btns.find(b => b.textContent.trim().toLowerCase() === 'mua hàng');
-                    const kiemHangBtn = btns.find(b => b.textContent.trim().toLowerCase() === 'kiểm hàng');
-                    
-                    const isActive = (btn) => {
-                        if (!btn) return false;
-                        if (btn.querySelector('.ellipse') !== null) return true;
-                        const bg = btn.style.backgroundColor || '';
-                        if (bg.includes('rgba') && bg.includes('0.4')) return false;
-                        if (bg.includes('rgb')) return true;
-                        return false;
-                    };
-
-                    if (muaHangBtn && kiemHangBtn) {
-                        const isMuaActive = isActive(muaHangBtn);
-                        const isKiemActive = isActive(kiemHangBtn);
-                        
-                        if (isMuaActive && isKiemActive) {
-                            kiemHangBtn.click(); // Click để bỏ tag Kiểm hàng
-                            return 'unchecked_kiem_hang';
-                        } else if (isKiemActive && !isMuaActive) {
-                            return 'only_kiem_hang';
-                        } else if (!isKiemActive) {
-                            return 'kiem_hang_not_active';
-                        }
-                    }
-                    return 'not_found';
+            # Kiểm tra xem còn chat nào ở vị trí skip_offset không
+            if skip_offset >= count:
+                # Đã hết chat trong tầm nhìn, thử cuộn xuống
+                no_more_chat_attempts += 1
+                logger.info(f"Đã hết chat trong tầm nhìn. Thử cuộn xuống... (lần {no_more_chat_attempts}/3)")
+                await page.evaluate('''() => {
+                    const holder = document.querySelector('.rc-virtual-list-holder');
+                    if (holder) holder.scrollTop += 800;
                 }''')
-                
-                if tag_status == 'unchecked_kiem_hang':
-                    logger.info("-> Chat ĐANG CÓ cả 2 tag 'Mua hàng' và 'Kiểm hàng'. Đã tự động TÍCH BỎ 'Kiểm hàng' thành công!")
-                    await page.wait_for_timeout(1000) # Chờ 1s để hệ thống lưu trạng thái
-                elif tag_status == 'only_kiem_hang':
-                    logger.info("-> Chat CHỈ CÓ tag 'Kiểm hàng' (Không có Mua hàng). BỎ QUA không xóa tag.")
-                elif tag_status == 'kiem_hang_not_active':
-                    logger.info("-> Chat KHÔNG CÓ tag 'Kiểm hàng'. BỎ QUA.")
-                else:
-                    logger.warning("-> Không tìm thấy đủ nút tag trên giao diện.")
+                await page.wait_for_timeout(2000)
+                continue
+            
+            no_more_chat_attempts = 0
+            chat_index += 1
+            
+            # Click vào chat ở vị trí skip_offset
+            target_chat = chat_locators.nth(skip_offset)
+            try:
+                text = await target_chat.inner_text()
+                await target_chat.evaluate('el => { const target = el.querySelector(".media-body") || el; target.click(); }')
+                logger.info(f"--- Chat thứ {chat_index}: {text[:40].replace(chr(10), ' ')} ---")
+            except Exception as e:
+                logger.warning(f"Lỗi khi click đoạn chat {chat_index}: {e}")
+                break
 
-            if new_chats_in_this_view == 0:
-                scroll_attempts += 1
-                logger.info(f"Không tìm thấy chat mới, đang thử cuộn xuống... (lần {scroll_attempts}/3)")
-            else:
-                scroll_attempts = 0
-                
-            # Thực hiện cuộn sidebar xuống dưới
-            await page.evaluate('''() => {
-                const holder = document.querySelector('.rc-virtual-list-holder');
-                if (holder) {
-                    holder.scrollTop += 800;
-                } else {
-                    const fallback = document.querySelector('.conversation-list-item')?.closest('div[style*="overflow"]');
-                    if(fallback) fallback.scrollTop += 800;
-                }
-            }''')
+            # Chờ nội dung chat bên phải load
             await page.wait_for_timeout(2000)
 
+            # KIỂM TRA TAG VÀ QUYẾT ĐỊNH BỎ TÍCH HAY BỎ QUA
+            logger.info("Kiểm tra điều kiện tag...")
+            
+            tag_status = await page.evaluate('''() => {
+                const btns = Array.from(document.querySelectorAll('#listShowTags .btn-tag-item'));
+                
+                const isActive = (btn) => {
+                    if (!btn) return false;
+                    if (btn.querySelector('.ellipse') !== null) return true;
+                    const bg = btn.style.backgroundColor || '';
+                    if (bg.includes('rgba') && bg.includes('0.4')) return false;
+                    if (bg.includes('rgb')) return true;
+                    return false;
+                };
+                
+                // Đếm tổng số tag đang active
+                const activeTags = btns.filter(b => isActive(b));
+                const activeTagNames = activeTags.map(b => b.textContent.trim().toLowerCase());
+                
+                // Tìm 2 tag cần kiểm tra
+                const hasMuaHang = activeTagNames.includes('mua hàng');
+                const hasKiemHang = activeTagNames.includes('kiểm hàng');
+                
+                // CHỈ bỏ tích khi có ĐÚNG 2 tag active là "Mua hàng" + "Kiểm hàng"
+                if (hasMuaHang && hasKiemHang && activeTags.length === 2) {
+                    const kiemHangBtn = btns.find(b => b.textContent.trim().toLowerCase() === 'kiểm hàng');
+                    kiemHangBtn.click();
+                    return 'unchecked';
+                }
+                
+                // Các trường hợp bỏ qua
+                if (hasKiemHang && !hasMuaHang) return 'skip_only_kiem';
+                if (hasMuaHang && hasKiemHang && activeTags.length > 2) return 'skip_extra_tags';
+                if (!hasKiemHang) return 'skip_no_kiem';
+                return 'skip_unknown';
+            }''')
+            
+            if tag_status == 'unchecked':
+                unchecked_count += 1
+                logger.info(f"✅ Đã BỎ TÍCH 'Kiểm hàng' thành công! (Tổng: {unchecked_count})")
+                # SAU KHI BỎ TÍCH: Chờ cho đến khi chat THẬT SỰ biến mất khỏi sidebar
+                # (tránh lỗi vòng lặp tiếp theo click lại chat cũ vì nó chưa kịp biến mất)
+                count_before = count
+                for wait_i in range(10):  # Tối đa chờ 5 giây (10 x 500ms)
+                    await page.wait_for_timeout(500)
+                    new_count = await page.locator('.conversation-list-item').count()
+                    if new_count < count_before:
+                        logger.info(f"   Sidebar đã cập nhật ({count_before} → {new_count} chat).")
+                        break
+                else:
+                    logger.warning("   Sidebar chưa cập nhật sau 5s, tiếp tục...")
+                
+            else:
+                # BỎ QUA: Chat vẫn còn trên sidebar.
+                # → Tăng skip_offset để lần sau nhảy qua chat này, click chat ở vị trí tiếp theo.
+                skipped_count += 1
+                
+                if tag_status == 'skip_only_kiem':
+                    logger.info(f"⏭️ BỎ QUA - Chỉ có tag 'Kiểm hàng' (không có 'Mua hàng'). (Bỏ qua: {skipped_count})")
+                elif tag_status == 'skip_extra_tags':
+                    logger.info(f"⏭️ BỎ QUA - Có tag ngoài 'Mua hàng' và 'Kiểm hàng'. (Bỏ qua: {skipped_count})")
+                elif tag_status == 'skip_no_kiem':
+                    logger.info(f"⏭️ BỎ QUA - Không có tag 'Kiểm hàng'. (Bỏ qua: {skipped_count})")
+                else:
+                    logger.info(f"⏭️ BỎ QUA - Trạng thái không xác định. (Bỏ qua: {skipped_count})")
+                
+                skip_offset += 1
+
         logger.info("=" * 50)
-        logger.info(f" HOÀN TẤT! Đã kiểm tra và gỡ tag cho tổng cộng: {chat_index} đoạn chat.")
+        logger.info(f" HOÀN TẤT!")
+        logger.info(f"   - Đã xử lý: {chat_index} đoạn chat")
+        logger.info(f"   - Đã bỏ tích 'Kiểm hàng': {unchecked_count}")
+        logger.info(f"   - Đã bỏ qua: {skipped_count}")
         logger.info("=" * 50)
 
         await browser.close()
