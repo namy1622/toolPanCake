@@ -16,7 +16,7 @@ PANCAKE_URL = 'https://pancake.vn/941461145712453'
 
 async def main():
     logger.info("=" * 50)
-    logger.info(" BẮT ĐẦU CHẠY TOOL BỎ TAG 'MUA HÀNG' (LỌC THEO 'KIỂM HÀNG')")
+    logger.info(" BẮT ĐẦU CHẠY TOOL BỎ TAG 'KIỂM HÀNG' (ĐIỀU KIỆN: CÓ CẢ TAG MUA HÀNG)")
     logger.info("=" * 50)
 
     async with async_playwright() as p:
@@ -132,33 +132,51 @@ async def main():
                 # Chờ nội dung chat bên phải load
                 await page.wait_for_timeout(2000)
 
-                # KIỂM TRA VÀ BỎ TAG MUA HÀNG
-                logger.info("Kiểm tra xem chat có đang gắn tag 'Mua hàng' không...")
+                # KIỂM TRA VÀ BỎ TAG KIỂM HÀNG
+                logger.info("Kiểm tra điều kiện tag 'Mua hàng' và 'Kiểm hàng'...")
                 
-                # Logic: Nút tag "Mua hàng" đang được chọn sẽ có thẻ <div class="ellipse"></div> bên trong 
-                # hoặc màu RGB đậm rgb(13, 90, 255) thay vì rgba(..., 0.4).
+                # Logic: Nút tag đang hoạt động thường có một chấm ellipse bên trong 
+                # hoặc màu không chứa độ trong suốt (không có rgba(..., 0.4)).
                 tag_status = await page.evaluate('''() => {
                     const btns = Array.from(document.querySelectorAll('#listShowTags .btn-tag-item'));
+                    
                     const muaHangBtn = btns.find(b => b.textContent.trim().toLowerCase() === 'mua hàng');
-                    if (muaHangBtn) {
-                        // Nút tag đang hoạt động thường có một chấm ellipse bên trong hoặc màu đậm
-                        const isActive = muaHangBtn.querySelector('.ellipse') !== null || muaHangBtn.style.backgroundColor.includes('rgb(');
-                        if (isActive) {
-                            muaHangBtn.click(); // Click để bỏ tag
-                            return 'unchecked';
+                    const kiemHangBtn = btns.find(b => b.textContent.trim().toLowerCase() === 'kiểm hàng');
+                    
+                    const isActive = (btn) => {
+                        if (!btn) return false;
+                        if (btn.querySelector('.ellipse') !== null) return true;
+                        const bg = btn.style.backgroundColor || '';
+                        if (bg.includes('rgba') && bg.includes('0.4')) return false;
+                        if (bg.includes('rgb')) return true;
+                        return false;
+                    };
+
+                    if (muaHangBtn && kiemHangBtn) {
+                        const isMuaActive = isActive(muaHangBtn);
+                        const isKiemActive = isActive(kiemHangBtn);
+                        
+                        if (isMuaActive && isKiemActive) {
+                            kiemHangBtn.click(); // Click để bỏ tag Kiểm hàng
+                            return 'unchecked_kiem_hang';
+                        } else if (isKiemActive && !isMuaActive) {
+                            return 'only_kiem_hang';
+                        } else if (!isKiemActive) {
+                            return 'kiem_hang_not_active';
                         }
-                        return 'not_active'; // Đã tắt sẵn
                     }
                     return 'not_found';
                 }''')
                 
-                if tag_status == 'unchecked':
-                    logger.info("-> Chat ĐANG CÓ tag 'Mua hàng'. Đã tự động TÍCH BỎ TÍCH thành công!")
+                if tag_status == 'unchecked_kiem_hang':
+                    logger.info("-> Chat ĐANG CÓ cả 2 tag 'Mua hàng' và 'Kiểm hàng'. Đã tự động TÍCH BỎ 'Kiểm hàng' thành công!")
                     await page.wait_for_timeout(1000) # Chờ 1s để hệ thống lưu trạng thái
-                elif tag_status == 'not_active':
-                    logger.info("-> Chat KHÔNG CÓ tag 'Mua hàng'. Bỏ qua.")
+                elif tag_status == 'only_kiem_hang':
+                    logger.info("-> Chat CHỈ CÓ tag 'Kiểm hàng' (Không có Mua hàng). BỎ QUA không xóa tag.")
+                elif tag_status == 'kiem_hang_not_active':
+                    logger.info("-> Chat KHÔNG CÓ tag 'Kiểm hàng'. BỎ QUA.")
                 else:
-                    logger.warning("-> Không tìm thấy nút tag 'Mua hàng' trên giao diện.")
+                    logger.warning("-> Không tìm thấy đủ nút tag trên giao diện.")
 
             if new_chats_in_this_view == 0:
                 scroll_attempts += 1
