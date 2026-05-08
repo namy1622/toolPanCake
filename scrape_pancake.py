@@ -7,7 +7,8 @@ from playwright.async_api import async_playwright
 
 # Constants
 DEBUG_PORT = 9222
-PANCAKE_URL = 'https://pancake.vn/941461145712453'
+PANCAKE_URL = 'https://pancake.vn/571938736002434'
+# PANCAKE_URL = 'https://pancake.vn/941461145712453'
 WORKSPACE_DIR = r'F:\tool_cao_data'
 
 # Create folders

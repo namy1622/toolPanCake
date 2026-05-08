@@ -1,0 +1,5 @@
+2026/05/08-13:29:06.070 34a0 Log #3: 1 ops saved to Table #4 OK
+2026/05/08-13:29:06.070 34a0 Archiving F:\tool_cao_data\chrome_debug_profile\Default\Site Characteristics Database/000003.log: OK
+2026/05/08-13:29:06.070 34a0 Table #4: 1 entries OK
+2026/05/08-13:29:06.072 34a0 Archiving F:\tool_cao_data\chrome_debug_profile\Default\Site Characteristics Database/MANIFEST-000001: OK
+2026/05/08-13:29:06.075 34a0 **** Repaired leveldb F:\tool_cao_data\chrome_debug_profile\Default\Site Characteristics Database; recovered 1 files; 130 bytes. Some data may have been lost. ****
