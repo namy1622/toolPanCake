@@ -67,8 +67,8 @@ async def main():
             logger.info("Tiến hành reload (tải lại) trang web...")
             await page.reload(wait_until='domcontentloaded', timeout=30000)
         
-        logger.info("Đang chờ trang tải hoàn tất (5s)...")
-        await page.wait_for_timeout(5000)
+        logger.info("Đang chờ trang tải hoàn tất (3s)...")
+        await page.wait_for_timeout(3000)
 
         # 1. BẤM BỘ LỌC ĐẦU TIÊN (HÌNH VUÔNG MÀU XÁM - KIỂM HÀNG) NẾU CHƯA CHỌN
         logger.info("Kiểm tra bộ lọc (nút hình vuông màu xám)...")
@@ -86,8 +86,8 @@ async def main():
         }''')
         
         if clicked_filter is True:
-            logger.info("Đã bấm chọn bộ lọc, chờ danh sách cập nhật (3s)...")
-            await page.wait_for_timeout(3000)
+            logger.info("Đã bấm chọn bộ lọc, chờ danh sách cập nhật (2s)...")
+            await page.wait_for_timeout(2000)
         elif clicked_filter is False:
             logger.info("Bộ lọc đã được chọn sẵn từ trước.")
         else:
@@ -141,7 +141,7 @@ async def main():
                 break
 
             # Chờ nội dung chat bên phải load
-            await page.wait_for_timeout(2000)
+            await page.wait_for_timeout(800)
 
             # KIỂM TRA TAG VÀ QUYẾT ĐỊNH BỎ TÍCH HAY BỎ QUA
             logger.info("Kiểm tra điều kiện tag...")
@@ -185,15 +185,15 @@ async def main():
                 logger.info(f"✅ Đã BỎ TÍCH 'Kiểm hàng' thành công! (Tổng: {unchecked_count})")
                 # SAU KHI BỎ TÍCH: Chờ cho đến khi chat THẬT SỰ biến mất khỏi sidebar
                 # (tránh lỗi vòng lặp tiếp theo click lại chat cũ vì nó chưa kịp biến mất)
-                count_before = count
-                for wait_i in range(10):  # Tối đa chờ 5 giây (10 x 500ms)
-                    await page.wait_for_timeout(500)
-                    new_count = await page.locator('.conversation-list-item').count()
-                    if new_count < count_before:
-                        logger.info(f"   Sidebar đã cập nhật ({count_before} → {new_count} chat).")
-                        break
-                else:
-                    logger.warning("   Sidebar chưa cập nhật sau 5s, tiếp tục...")
+                # count_before = count
+                # for wait_i in range(10):  # Tối đa chờ 5 giây (10 x 500ms)
+                #     await page.wait_for_timeout(500)
+                #     new_count = await page.locator('.conversation-list-item').count()
+                #     if new_count < count_before:
+                #         logger.info(f"   Sidebar đã cập nhật ({count_before} → {new_count} chat).")
+                #         break
+                # else:
+                #     logger.warning("   Sidebar chưa cập nhật sau 5s, tiếp tục...")
                 
             else:
                 # BỎ QUA: Chat vẫn còn trên sidebar.
