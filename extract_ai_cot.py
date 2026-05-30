@@ -86,66 +86,8 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
   "so_hop": ""
 }
 """
-#     system_prompt = """Bạn là trợ lý trích xuất thông tin khách hàng từ đoạn chat mua hàng. Nhiệm vụ: Tìm và trích xuất Tên khách hàng, Số điện thoại, Địa chỉ, Giá chốt cuối cùng, và Số hộp.
-# QUY TẮC TỐI THƯỢNG:
-# 1. Bạn phải COPY Y HỆT từng chữ cái từ tin nhắn của khách cho phần Tên và Địa chỉ.
-# 2. TUYỆT ĐỐI KHÔNG viết hoa chữ cái đầu nếu khách không viết.
-# 3. TUYỆT ĐỐI KHÔNG sửa lỗi chính tả, không tự thêm/bớt từ.
-# 4. KHÔNG tự suy luận địa danh.
-# 5. ĐỊNH DẠNG SỐ HỘP: Bạn bắt buộc phải phân tích kỹ tin nhắn chốt đơn cuối cùng của "Tôi" (Người bán) và ghi ra trường "ly_do_tinh_so_hop" trước.
-# - RẤT QUAN TRỌNG: Nếu có khuyến mãi, phải cộng dồn vào! (Ví dụ: Mua 3 tặng 1 -> 4 hộp; Mua 5 tặng 2 -> 7 hộp; Mua 4 tặng 1 -> 5 hộp; Mua 2 tặng 1 -> 3 hộp).
-# - Sau khi phân tích xong, mới ghi tổng số hộp thực tế khách nhận vào trường "so_hop" theo định dạng "1h", "2h", "4h", "7h"...
 
-# --- VÍ DỤ 1 ---
-# Khách: gui ve dia chi 123 le loi q1 nhe e 0901234567. minh lay 2 hop nhe, 
-# Tôi: 3 hộp là 240k miễn ship. Mua 3 tặng 1 (tổng nhận 4 hộp).
-# Assistant:
-# {
-#   "ten": "",
-#   "sdt": "0901234567",
-#   "dia_chi": "123 le loi q1",
-#   "gia_chot": "240000",
-#   "ly_do_tinh_so_hop": "Người bán (Tôi) chốt cuối cùng là 3 hộp 240k, áp dụng mua 3 tặng 1. Tổng cộng khách nhận 4 hộp.",
-#   "so_hop": "4h"
-# }
-
-# --- VÍ DỤ 2 ---
-# Khách: gui ve dia chi 123 le loi q1 nhe e 0901234567. minh lay 2 hop nhe, 
-# Tôi: đơn của mình 2 hộp là 160k miễn ship
-# Assistant:
-# {
-#   "ten": "",
-#   "sdt": "0901234567",
-#   "dia_chi": "123 le loi q1",
-#   "gia_chot": "160000",
-#   "ly_do_tinh_so_hop": "Người bán (Tôi) chốt đơn 2 hộp 160k, không có khuyến mãi. Tổng nhận 2 hộp.",
-#   "so_hop": "2h"
-# }
-
-# --- VÍ DỤ 3 ---
-# Khách: Lê Xuân mình khu phố đông anh 2 thị trấn nam ban lâm hà lâm đồng 0986527800. cho 5 thoi nhe
-# Tôi: 5 hộp tặng 2 hộp tổng 7 hộp nhé. Giá 400k.
-# Assistant:
-# {
-#   "ten": "Lê Xuân",
-#   "sdt": "0986527800",
-#   "dia_chi": "khu phố đông anh 2 thị trấn nam ban lâm hà lâm đồng",
-#   "gia_chot": "400000",
-#   "ly_do_tinh_so_hop": "Khách đặt 5 hộp, người bán chốt mua 5 tặng 2. Tổng cộng nhận 7 hộp.",
-#   "so_hop": "7h"
-# }
-
-# --- KẾT QUẢ TRẢ VỀ ---
-# Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
-# {
-#   "ten": "",
-#   "sdt": "",
-#   "dia_chi": "",
-#   "gia_chot": "",
-#   "ly_do_tinh_so_hop": "",
-#   "so_hop": ""
-# }"""
-
+# 5. Với số điện thoại thì thêm ký tự ' ở đầu bởi sẽ bị mất số 0 ở đầu trong Excel
 
     payload = {
         "model": MODEL,
@@ -212,19 +154,137 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
     print(f"\n [!] Bỏ cuộc sau {max_retries} lần thử nghiệm. Bỏ qua file này.")
     return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
 
+# def main():
+#     json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+#     if not json_files:
+#         print("Không tìm thấy file JSON nào trong thư mục data.")
+#         return
+
+#     import datetime
+#     print(f"Tìm thấy {len(json_files)} file lịch sử chat. Bắt đầu dùng AI để phân tích...\n")
+
+#     # Kiểm tra file CSV đã tồn tại chưa
+#     csv_mode = 'w'  # Mặc định tạo mới
+#     if os.path.exists(OUTPUT_CSV):
+#         # Đọc file để kiểm tra có data hay không
+#         with open(OUTPUT_CSV, 'r', encoding='utf-8-sig') as check_file:
+#             content = check_file.read().strip()
+#             # Kiểm tra có dòng data nào không (bỏ qua header và dòng timestamp)
+#             lines = [l for l in content.split('\n') if l.strip() and not l.startswith('#')]
+#             has_data = len(lines) > 1  # Có nhiều hơn 1 dòng header = có data
+        
+#         if has_data:
+#             print(f"⚠️  File '{os.path.basename(OUTPUT_CSV)}' ĐÃ CÓ DỮ LIỆU!")
+#             clear_choice = input("   Bạn có muốn XÓA SẠCH dữ liệu cũ trước khi chạy? (y/N): ").strip().lower()
+#             if clear_choice == 'y':
+#                 csv_mode = 'w'
+#                 print("   → Đã xóa dữ liệu cũ. Bắt đầu ghi mới.\n")
+#             else:
+#                 csv_mode = 'a'
+#                 print("   → Giữ nguyên dữ liệu cũ. Ghi nối thêm vào cuối.\n")
+#         else:
+#             print(f"File '{os.path.basename(OUTPUT_CSV)}' đã tồn tại nhưng trống. Bắt đầu ghi.\n")
+#             csv_mode = 'w'
+    
+#     # Mở file CSV để ghi kết quả
+#     fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Tổng Tin Nhắn']
+#     with open(OUTPUT_CSV, mode=csv_mode, encoding='utf-8-sig', newline='') as csv_file:
+#         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        
+#         # Nếu tạo mới (hoặc xóa sạch), ghi timestamp + header
+#         if csv_mode == 'w':
+#             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#             csv_file.write(f"# Thời gian chạy tool: {timestamp}\n")
+#             writer.writeheader()
+
+#         for file_path in json_files:
+#             file_name = os.path.basename(file_path)
+#             with open(file_path, 'r', encoding='utf-8') as f:
+#                 data = json.load(f)
+
+#             messages = data.get('messages', [])
+#             if not messages:
+#                 continue
+
+#             # Ghép lịch sử chat lại thành một đoạn văn bản ngắn gọn
+#             chat_text = ""
+#             for msg in messages:
+#                 # Chỉ lấy 1 đoạn hội thoại giới hạn để tiết kiệm token và chạy nhanh hơn
+#                 chat_text += f"{msg['sender']}: {msg['content']}\n"
+            
+#             print(f"Đang phân tích file: {file_name}...", end=" ", flush=True)
+#             start_time = time.time()
+#             ai_result = extract_info_with_ai(chat_text)
+#             elapsed_time = round(time.time() - start_time, 2)
+#             print(f"({elapsed_time}s)")
+            
+#             # Nếu AI không lấy được tên, dùng tạm tên trên Facebook
+#             ten_khach = ai_result.get('ten', '').strip()
+#             if not ten_khach:
+#                 ten_khach = data.get('customerName', '')
+
+#             writer.writerow({
+#                 'File Nguồn': file_name,
+#                 'Tên Khách Hàng': ten_khach,
+#                 'Số Điện Thoại': ai_result.get('sdt', ''),
+#                 'Địa Chỉ': ai_result.get('dia_chi', ''),
+#                 'Giá Chốt': ai_result.get('gia_chot', ''),
+#                 'Số Hộp': ai_result.get('so_hop', ''),
+#                 # 'Tổng Tin Nhắn': data.get('totalMessages', 0)
+#             })
+            
+#             print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop', '')}")
+            
+#             # Nghỉ 5s giữa các request để tránh quá tải API (Rate Limit)
+#             time.sleep(5)
+
+#     print(f"\n HOÀN TẤT! Toàn bộ thông tin đã được lưu ra file Excel: {OUTPUT_CSV}")
+
 def main():
-    json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
+    # --- CẬP NHẬT: Loại bỏ các file đã có chữ "done_" ở đầu để không quét lại ---
+    all_json = glob.glob(os.path.join(DATA_DIR, "*.json"))
+    json_files = [f for f in all_json if not os.path.basename(f).startswith("done_")]
+    
     if not json_files:
-        print("Không tìm thấy file JSON nào trong thư mục data.")
+        print("Không tìm thấy file JSON nào mới (chưa xử lý) trong thư mục data.")
         return
 
+    import datetime
     print(f"Tìm thấy {len(json_files)} file lịch sử chat. Bắt đầu dùng AI để phân tích...\n")
 
+    # Kiểm tra file CSV đã tồn tại chưa
+    csv_mode = 'w'  # Mặc định tạo mới
+    if os.path.exists(OUTPUT_CSV):
+        # Đọc file để kiểm tra có data hay không
+        with open(OUTPUT_CSV, 'r', encoding='utf-8-sig') as check_file:
+            content = check_file.read().strip()
+            # Kiểm tra có dòng data nào không (bỏ qua header và dòng timestamp)
+            lines = [l for l in content.split('\n') if l.strip() and not l.startswith('#')]
+            has_data = len(lines) > 1  # Có nhiều hơn 1 dòng header = có data
+        
+        if has_data:
+            print(f"⚠️  File '{os.path.basename(OUTPUT_CSV)}' ĐÃ CÓ DỮ LIỆU!")
+            clear_choice = input("   Bạn có muốn XÓA SẠCH dữ liệu cũ trước khi chạy? (y/N): ").strip().lower()
+            if clear_choice == 'y':
+                csv_mode = 'w'
+                print("   → Đã xóa dữ liệu cũ. Bắt đầu ghi mới.\n")
+            else:
+                csv_mode = 'a'
+                print("   → Giữ nguyên dữ liệu cũ. Ghi nối thêm vào cuối.\n")
+        else:
+            print(f"File '{os.path.basename(OUTPUT_CSV)}' đã tồn tại nhưng trống. Bắt đầu ghi.\n")
+            csv_mode = 'w'
+    
     # Mở file CSV để ghi kết quả
-    with open(OUTPUT_CSV, mode='w', encoding='utf-8-sig', newline='') as csv_file:
-        fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Tổng Tin Nhắn']
+    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Tổng Tin Nhắn']
+    with open(OUTPUT_CSV, mode=csv_mode, encoding='utf-8-sig', newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
+        
+        # Nếu tạo mới (hoặc xóa sạch), ghi timestamp + header
+        if csv_mode == 'w':
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            csv_file.write(f"# Thời gian chạy tool: {timestamp}\n")
+            writer.writeheader()
 
         for file_path in json_files:
             file_name = os.path.basename(file_path)
@@ -263,6 +323,17 @@ def main():
             })
             
             print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop', '')}")
+            
+            # --- CẬP NHẬT: Đổi tên file để đánh dấu đã xử lý xong ---
+            new_file_name = f"done_{file_name}"
+            new_file_path = os.path.join(DATA_DIR, new_file_name)
+            try:
+                # Phải đóng file trước khi đổi tên (đã đóng ở block 'with' bên trên rồi)
+                os.rename(file_path, new_file_path)
+                print(f" -> Đã đổi tên thành: {new_file_name}")
+            except Exception as e:
+                print(f" -> Lỗi khi đổi tên file: {e}")
+            # --------------------------------------------------------
             
             # Nghỉ 5s giữa các request để tránh quá tải API (Rate Limit)
             time.sleep(5)

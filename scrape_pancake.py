@@ -7,12 +7,27 @@ from playwright.async_api import async_playwright
 
 # Constants
 DEBUG_PORT = 9222
-PANCAKE_URL = 'https://pancake.vn/571938736002434'
-# PANCAKE_URL = 'https://pancake.vn/941461145712453'
+PAGES = {
+    "1": {"name": "Dây Thìa Canh", "url": "https://pancake.vn/571938736002434"},
+    "2": {"name": "Trà Đông Trùng", "url": "https://pancake.vn/941461145712453"},
+}
+
+print("=" * 50)
+print(" CHỌN PAGE CẦN CÀO DỮ LIỆU")
+print("=" * 50)
+for key, val in PAGES.items():
+    print(f" {key}. {val['name']} ({val['url']})")
+page_choice = input("\nNhập số thứ tự để chọn (Mặc định 1): ").strip() or "1"
+if page_choice not in PAGES:
+    page_choice = "1"
+PANCAKE_URL = PAGES[page_choice]["url"]
+print(f"\n-> Đã chọn page: {PAGES[page_choice]['name']}")
+print("-" * 50)
+
 WORKSPACE_DIR = r'F:\tool_cao_data'
 
 # Create folders
-today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+today_str = datetime.datetime.now().strftime("%d-%m")
 LOG_DIR = os.path.join(WORKSPACE_DIR, 'logs', today_str)
 DATA_DIR = os.path.join(WORKSPACE_DIR, 'data')
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -162,8 +177,8 @@ async def main():
                     continue
 
                 # Chờ chat load trên giao diện chính
-                logger.info("Chờ nội dung chat load (3s)...")
-                await page.wait_for_timeout(3000)
+                logger.info("Chờ nội dung chat load (2s)...")
+                await page.wait_for_timeout(2000)
 
                 # 3. TRÍCH XUẤT DỮ LIỆU (CHỐNG LẶP & ĐÚNG NGƯỜI GỬI)
                 logger.info("Đang trích xuất dữ liệu chat...")
@@ -204,8 +219,7 @@ async def main():
                         const text = el.innerText?.trim() || '';
                         return {
                             sender: sender,
-                            content: text,
-                            class: cls
+                            content: text
                         };
                     }).filter(m => m.content.length > 0);
 
@@ -234,7 +248,7 @@ async def main():
                 safe_name = "".join([c for c in customer_name if c.isalpha() or c.isdigit() or c==' ']).rstrip()
                 if not safe_name: safe_name = f"chat_{chat_index}"
                 
-                json_filename = os.path.join(DATA_DIR, f"{today_str}_{chat_index}_{safe_name}.json")
+                json_filename = os.path.join(DATA_DIR, f"{chat_index}_{safe_name}_{today_str}.json")
                 with open(json_filename, 'w', encoding='utf-8') as f:
                     json.dump(output_data, f, ensure_ascii=False, indent=2)
 
@@ -254,7 +268,7 @@ async def main():
                 
                 if clicked_tag:
                     logger.info("Đã bấm gắn tag 'Mua hàng' thành công.")
-                    await page.wait_for_timeout(1000) # Đợi 1s để hệ thống lưu tag trước khi sang chat khác
+                    await page.wait_for_timeout(1500) # Đợi 1s để hệ thống lưu tag trước khi sang chat khác
                 else:
                     logger.warning("Không tìm thấy nút tag 'Mua hàng' trên giao diện.")
 
@@ -277,7 +291,7 @@ async def main():
                 }
             }''')
             # Đợi cho danh sách ảo render các phần tử mới
-            await page.wait_for_timeout(2000)
+            await page.wait_for_timeout(1500)
 
         logger.info("=" * 50)
         logger.info(f" HOÀN TẤT QUÉT TẤT CẢ ĐOẠN CHAT! Tổng số: {chat_index}")
