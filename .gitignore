@@ -1,4 +1,5 @@
 data/*
+output/*
+chrome_debug_profile/
+logs/
 appsettings.json
-
-danh_sach_khach_hang.csv

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pancake Sales Automation Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Flatpickr Date Picker Library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- TOP CONTROL HEADER -->
+        <header class="app-header">
+            <!-- Logo Section -->
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="var(--cyan-glow)" />
+                        <path d="M2 17L12 22L22 17" stroke="var(--cyan-light)" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M2 12L12 17L22 12" stroke="var(--cyan-light)" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>PANCAKE CONTROL</h1>
+                    <span class="sub-text">Hệ thống Điều phối & Phân tích Đơn hàng</span>
+                </div>
+            </div>
+
+            <!-- Prominent Visual Page Selector Cards -->
+            <div class="page-selector-area">
+                <span class="section-label">CHỌN TRANG CÀO DỮ LIỆU:</span>
+                <div class="page-cards-grid">
+                    <div class="page-card active" data-page="1">
+                        <div class="page-card-glow"></div>
+                        <span class="page-card-name">Dây Thìa Canh</span>
+                        <span class="page-card-url">pancake.vn/5719387360...</span>
+                    </div>
+                    <div class="page-card" data-page="2">
+                        <div class="page-card-glow"></div>
+                        <span class="page-card-name">Trà Đông Trùng</span>
+                        <span class="page-card-url">pancake.vn/9414611457...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Picker Calendar & System Actions -->
+            <div class="system-controls">
+                <div class="control-group">
+                    <label for="date-select" class="text-color red">NGÀY LÀM VIỆC (Định dạng File):</label>
+                    <div class="date-picker-wrapper">
+                        <svg class="calendar-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                        <input type="text" id="date-select" class="styled-input date-input" readonly
+                            placeholder="Chọn ngày...">
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="btn-run-all" class="btn btn-primary btn-glow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                        <span>Chạy Tất Cả</span>
+                    </button>
+                    <button id="btn-stop" class="btn btn-danger" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        </svg>
+                        <span>Dừng</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN SPLIT WORKSPACE -->
+        <div class="workspace-layout">
+
+            <!-- LEFT PANEL: FILE BROWSER -->
+            <aside class="file-browser-panel">
+                <div class="panel-header">
+                    <div class="header-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <span>Hồ Sơ Cuộc Trò Chuyện (JSON)</span>
+                    </div>
+                    <span class="file-counter" id="json-file-count">0 files</span>
+                </div>
+
+                <div class="file-actions-toolbar">
+                    <button id="btn-run-scrape" class="btn btn-sm btn-main btn-accent-dim">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        <span>Chạy Cào Dữ Liệu</span>
+                    </button>
+                </div>
+
+                <div class="file-list-container" id="scrape-file-list">
+                    <div class="empty-list-msg">Đang tải danh sách file...</div>
+                </div>
+            </aside>
+
+            <!-- RIGHT PANEL: DATA EXPLORER & CSV INTERFACE -->
+            <section class="data-explorer-panel">
+                <div class="panel-header explorer-header">
+                    <div class="header-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                            <polyline points="10 9 9 9 8 9" />
+                        </svg>
+                        <span>Kết Quả Trích Xuất Phân Tích AI (CSV)</span>
+                    </div>
+
+                    <div class="extract-controls-bar">
+                        <label for="model-select" class="text-color red">Chọn Mô Hình:</label>
+                        <select id="model-select" class="styled-select select-sm">
+                            <!-- Load động từ appsettings.json -->
+                        </select>
+                        <button id="btn-run-extract" class="btn btn-sm btn-main btn-accent-dim">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                            <span>Chạy Phân Tích AI - Lọc data theo ngày</span>
+                        </button>
+                        <button id="btn-refresh-csv" class="btn btn-sm" title="Làm mới bảng">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                            </svg>
+                        </button>
+                        <button id="btn-open-folder" class="btn btn-sm btn-accent-dim"
+                            title="Mở thư mục chứa file Excel">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                            </svg>
+                            <span>Thư mục Excel</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="csv-split-workspace">
+                    <!-- Left: Table grid -->
+                    <div class="table-scroll-container">
+                        <table class="styled-table" id="extracted-customers-table">
+                            <thead>
+                                <tr>
+                                    <th>Khách Hàng</th>
+                                    <th>Số Điện Thoại</th>
+                                    <th>Địa Chỉ Giao Hàng</th>
+                                    <th>Giá Chốt</th>
+                                    <th>Số Hộp</th>
+                                    <th>Hội thoại</th>
+                                </tr>
+                            </thead>
+                            <tbody id="extracted-customers-body">
+                                <tr>
+                                    <td colspan="6" class="table-placeholder">Đang nạp dữ liệu khách hàng trích xuất...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Right: Sliding details sidebar for Dialogue & AI justification -->
+                    <div class="chat-detail-sidebar" id="chat-detail-panel">
+                        <div class="detail-placeholder" id="chat-detail-placeholder">
+                            <div class="placeholder-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                </svg>
+                            </div>
+                            <p>Nhấp chọn một hàng trong bảng CSV bên trái hoặc một File JSON bên cột File Browser để đối
+                                chiếu lịch sử chat và lập luận AI.</p>
+                        </div>
+
+                        <div class="detail-content hidden" id="chat-detail-content">
+                            <div class="detail-header">
+                                <h3 id="detail-customer-name">Khách Hàng</h3>
+                                <span class="source-badge" id="detail-source-file">file_chat.json</span>
+                            </div>
+                            <div class="detail-section">
+                                <h4 class="section-badge yellow-badge">Lập luận tính số hộp của AI:</h4>
+                                <div class="ai-reasoning-box" id="detail-ai-reasoning">
+                                    -
+                                </div>
+                            </div>
+                            <div class="detail-section chat-section">
+                                <h4 class="section-badge cyan-badge">Nội dung cuộc trò chuyện:</h4>
+                                <div class="chat-dialog-box" id="detail-chat-dialog">
+                                    <!-- Chat bubbles go here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- COLLAPSIBLE SYSTEM LOG DRAWER (BOTTOM) -->
+        <footer class="system-log-drawer collapsed" id="log-drawer">
+            <!-- Toggle header -->
+            <div class="drawer-header" id="log-drawer-toggle">
+                <div class="drawer-status-group">
+                    <span class="drawer-title">BẢNG ĐIỀU KHIỂN & NHẬT KÝ BẢN CHẠY (LOG TERMINALS)</span>
+                    <!-- Stats summary inline -->
+                    <div class="inline-stats-summary" id="inline-uncheck-stats">
+                        <span class="stat-badge cyan">Đã quét: <strong id="stat-uncheck-total">0</strong></span>
+                        <span class="stat-badge green">Bỏ tag: <strong id="stat-uncheck-success">0</strong></span>
+                        <span class="stat-badge yellow">Bỏ qua: <strong id="stat-uncheck-skip">0</strong></span>
+                    </div>
+                </div>
+
+                <div class="drawer-actions">
+                    <!-- Uncheck remover run triggers inside logs area too -->
+                    <button id="btn-run-uncheck" class="btn btn-sm btn-accent-dim btn-main" style="margin-right: 15px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>Chạy Bỏ Tag Kiểm Hàng</span>
+                    </button>
+
+                    <div id="connection-badge" class="connection-status badge-offline">
+                        <span class="status-dot"></span>
+                        <span id="status-text">Đang kết nối...</span>
+                    </div>
+
+                    <button class="btn-drawer-toggle " id="btn-toggle-drawer">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Drawer Terminals Area -->
+            <div class="drawer-body">
+                <!-- Terminal Navigation Tabs -->
+                <div class="terminal-tabs">
+                    <button class="terminal-tab active" data-terminal="terminal-scrape">Logs Cào Dữ Liệu</button>
+                    <button class="terminal-tab" data-terminal="terminal-extract">Logs Phân Tích AI</button>
+                    <button class="terminal-tab" data-terminal="terminal-uncheck">Logs Bỏ Tag</button>
+                </div>
+
+                <!-- Terminals Grid Panes -->
+                <div class="terminal-panes">
+                    <!-- Pane 1: Scraper Terminal -->
+                    <div class="terminal-pane active" id="terminal-scrape">
+                        <div class="terminal-pane-header">
+                            <span class="sub-title">Logs - Trình cào dữ liệu Pancake (Playwright CDP Scraper)</span>
+                            <div class="pane-actions">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="scrape-autoscroll" checked>
+                                    <span class="checkmark"></span> Tự cuộn
+                                </label>
+                                <button id="btn-clear-scrape-log" class="btn btn-xs">Xóa</button>
+                            </div>
+                        </div>
+                        <div class="terminal-screen" id="scrape-log">
+                            <div class="log-line system">Sẵn sàng chạy cào dữ liệu từ Pancake...</div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 2: Extractor Terminal -->
+                    <div class="terminal-pane" id="terminal-extract">
+                        <div class="terminal-pane-header">
+                            <span class="sub-title">Logs - Trình trích xuất phân tích trí tuệ nhân tạo (OpenAI
+                                API)</span>
+                            <div class="pane-actions">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="extract-autoscroll" checked>
+                                    <span class="checkmark"></span> Tự cuộn
+                                </label>
+                                <button id="btn-clear-extract-log" class="btn btn-xs">Xóa</button>
+                            </div>
+                        </div>
+                        <div class="terminal-screen" id="extract-log">
+                            <div class="log-line system">Sẵn sàng chạy trích xuất thông tin chat bằng AI...</div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 3: Unchecker Terminal -->
+                    <div class="terminal-pane" id="terminal-uncheck">
+                        <div class="terminal-pane-header">
+                            <span class="sub-title">Logs - Trình tự động gỡ nhãn Kiểm Hàng (Pancake Automator)</span>
+                            <div class="pane-actions">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="uncheck-autoscroll" checked>
+                                    <span class="checkmark"></span> Tự cuộn
+                                </label>
+                                <button id="btn-clear-uncheck-log" class="btn btn-xs">Xóa</button>
+                            </div>
+                        </div>
+                        <div class="terminal-screen" id="uncheck-log">
+                            <div class="log-line system">Sẵn sàng chạy bỏ tag Kiểm Hàng sau khi đã lưu Tag Mua Hàng...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- MODULE SCRIPTS -->
+    <script src="/js/scrape.js" type="module"></script>
+    <script src="/js/extract.js" type="module"></script>
+    <script src="/js/uncheck.js" type="module"></script>
+    <script src="/js/app.js" type="module"></script>
+</body>
+
+</html>
