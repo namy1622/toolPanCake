@@ -6,32 +6,102 @@ import glob
 import sys
 import re
 import time
-# Cấu hình đường dẫn
-WORKSPACE_DIR = r"F:\tool_cao_data"
+import datetime
 
-# Đọc cấu hình từ appsettings.json
+# Đảm bảo luồng xuất dữ liệu luôn dùng UTF-8 trên Windows để không bị lỗi CP1252
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
+
+# Tự động xác định thư mục gốc của dự án
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if os.path.basename(SCRIPT_DIR) == 'scripts':
+    WORKSPACE_DIR = os.path.dirname(SCRIPT_DIR)
+else:
+    WORKSPACE_DIR = SCRIPT_DIR
+
+# Danh sách page
+PAGES = {
+    "1": {"name": "Dây Thìa Canh", "folder": "DayThiaCanh"},
+    "2": {"name": "Trà Đông Trùng", "folder": "TraDongTrung"},
+}
+
+# Đọc arguments từ Server
+arg_page = None
+arg_model = None
+arg_date = None
+
+if len(sys.argv) > 1:
+    arg_page = sys.argv[1].strip()
+if len(sys.argv) > 2:
+    arg_model = sys.argv[2].strip()
+if len(sys.argv) > 3:
+    arg_date = sys.argv[3].strip()
+
+# Chọn page
+if arg_page:
+    page_choice = arg_page
+    print(f"Nhận tham số dòng lệnh page: {page_choice}")
+else:
+    print("=" * 50)
+    print(" CHỌN PAGE CẦN PHÂN TÍCH")
+    print("=" * 50)
+    for key, val in PAGES.items():
+        print(f" {key}. {val['name']}")
+    page_choice = input("\nNhập số thứ tự để chọn (Mặc định 1): ").strip() or "1"
+
+if page_choice not in PAGES:
+    page_choice = "1"
+selected_page = PAGES[page_choice]
+PAGE_FOLDER = selected_page["folder"]
+print(f"\n-> Đã chọn page: {selected_page['name']}")
+print("-" * 50)
+
+# Đọc cấu hình AI từ appsettings.json
 SETTINGS_FILE = os.path.join(WORKSPACE_DIR, "appsettings.json")
 try:
     with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
         settings = json.load(f)
-        
-        print("=" * 50)
-        print(" CHỌN MÔ HÌNH AI ĐỂ XỬ LÝ DỮ LIỆU")
-        print("=" * 50)
         keys = list(settings.keys())
-        for i, key in enumerate(keys, 1):
-            model_name = settings[key].get("Model", "Unknown")
-            print(f" {i}. {key} (Model: {model_name})")
-            
-        choice = input("\nNhập số thứ tự để chọn (Mặc định 1): ")
-        try:
-            idx = int(choice) - 1
-            if idx < 0 or idx >= len(keys):
+        
+        if arg_model:
+            # Check if arg_model is an index or key
+            if arg_model in keys:
+                selected_key = arg_model
+            else:
+                try:
+                    idx = int(arg_model) - 1
+                    if 0 <= idx < len(keys):
+                        selected_key = keys[idx]
+                    else:
+                        selected_key = keys[0]
+                except:
+                    matched_key = None
+                    for key in keys:
+                        if arg_model.lower() in key.lower():
+                            matched_key = key
+                            break
+                    selected_key = matched_key if matched_key else keys[0]
+            print(f"Nhận tham số dòng lệnh AI model: {selected_key}")
+        else:
+            print("\n" + "=" * 50)
+            print(" CHỌN MÔ HÌNH AI ĐỂ XỬ LÝ DỮ LIỆU")
+            print("=" * 50)
+            for i, key in enumerate(keys, 1):
+                model_name = settings[key].get("Model", "Unknown")
+                print(f" {i}. {key} (Model: {model_name})")
+                
+            choice = input("\nNhập số thứ tự để chọn (Mặc định 1): ")
+            try:
+                idx = int(choice) - 1
+                if idx < 0 or idx >= len(keys):
+                    idx = 0
+            except:
                 idx = 0
-        except:
-            idx = 0
+                
+            selected_key = keys[idx]
             
-        selected_key = keys[idx]
         print(f"\n-> Đang khởi động AI với cấu hình: {selected_key}")
         print("-" * 50)
         
@@ -43,9 +113,19 @@ except Exception as e:
     print(f"Lỗi khi đọc file cấu hình appsettings.json: {e}")
     sys.exit(1)
 
+# Đường dẫn data và output theo page + ngày
+if arg_date:
+    print(f"Nhận tham số dòng lệnh ngày (date): {arg_date}")
+    today_str = arg_date
+else:
+    today_str = datetime.datetime.now().strftime("%d.%m.%y")
+    print(f"Không có tham số ngày dòng lệnh. Mặc định ngày hiện tại: {today_str}")
 
-DATA_DIR = os.path.join(WORKSPACE_DIR, "data")
-OUTPUT_CSV = os.path.join(WORKSPACE_DIR, "danh_sach_khach_hang.csv")
+DATA_DIR = os.path.join(WORKSPACE_DIR, "data", PAGE_FOLDER, today_str)
+print(f"Thư mục dữ liệu nguồn quét: {DATA_DIR}")
+OUTPUT_DIR = os.path.join(WORKSPACE_DIR, "output", PAGE_FOLDER)
+OUTPUT_CSV = os.path.join(OUTPUT_DIR, f"{today_str}.csv")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def extract_info_with_ai(chat_text):
     headers = {
@@ -87,15 +167,13 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
 }
 """
 
-# 5. Với số điện thoại thì thêm ký tự ' ở đầu bởi sẽ bị mất số 0 ở đầu trong Excel
-
     payload = {
         "model": MODEL,
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Đoạn chat:\n{chat_text}\n\nLưu ý: Bạn BẮT BUỘC phải xuất kết quả ở dạng JSON thuần túy (không giải thích, không tóm tắt, không phân tích, không thêm bất kỳ chữ nào ngoài JSON). Mẫu:\n{{\n  \"ten\": \"\",\n  \"sdt\": \"\",\n  \"dia_chi\": \"\",\n  \"gia_chot\": \"\",\n  \"ly_do_tinh_so_hop\": \"\",\n  \"so_hop\": \"\"\n}}"}
         ],
-        "temperature": 0.1, # Nhiệt độ thấp giúp AI làm theo khuôn rập, không tự sáng tạo thêm
+        "temperature": 0.1,
     }
 
     fallback_delays = [5, 3, 6, 10]
@@ -107,10 +185,8 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
             response.raise_for_status()
             result = response.json()
             
-            # Lấy nội dung text từ AI
             content = result['choices'][0]['message']['content']
             
-            # Dùng Regex để tìm khối JSON phòng khi AI lỡ chèn chữ "Tóm tắt..." vào
             match = re.search(r'\{[\s\S]*\}', content)
             if match:
                 json_str = match.group(0)
@@ -123,10 +199,8 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
                 if attempt >= max_retries:
                     break
                     
-                # Mặc định lấy thời gian chờ từ mảng [5, 3, 6, 10]
                 wait_time = fallback_delays[attempt]
                 
-                # Nếu API Groq có trả về số giây chính xác (ví dụ 15s), thì ưu tiên dùng số đó để chắc chắn thành công
                 try:
                     error_msg = response.json().get('error', {}).get('message', '')
                     time_match = re.search(r'try again in (\d+\.?\d*)s', error_msg)
@@ -154,134 +228,33 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
     print(f"\n [!] Bỏ cuộc sau {max_retries} lần thử nghiệm. Bỏ qua file này.")
     return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
 
-# def main():
-#     json_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
-#     if not json_files:
-#         print("Không tìm thấy file JSON nào trong thư mục data.")
-#         return
-
-#     import datetime
-#     print(f"Tìm thấy {len(json_files)} file lịch sử chat. Bắt đầu dùng AI để phân tích...\n")
-
-#     # Kiểm tra file CSV đã tồn tại chưa
-#     csv_mode = 'w'  # Mặc định tạo mới
-#     if os.path.exists(OUTPUT_CSV):
-#         # Đọc file để kiểm tra có data hay không
-#         with open(OUTPUT_CSV, 'r', encoding='utf-8-sig') as check_file:
-#             content = check_file.read().strip()
-#             # Kiểm tra có dòng data nào không (bỏ qua header và dòng timestamp)
-#             lines = [l for l in content.split('\n') if l.strip() and not l.startswith('#')]
-#             has_data = len(lines) > 1  # Có nhiều hơn 1 dòng header = có data
-        
-#         if has_data:
-#             print(f"⚠️  File '{os.path.basename(OUTPUT_CSV)}' ĐÃ CÓ DỮ LIỆU!")
-#             clear_choice = input("   Bạn có muốn XÓA SẠCH dữ liệu cũ trước khi chạy? (y/N): ").strip().lower()
-#             if clear_choice == 'y':
-#                 csv_mode = 'w'
-#                 print("   → Đã xóa dữ liệu cũ. Bắt đầu ghi mới.\n")
-#             else:
-#                 csv_mode = 'a'
-#                 print("   → Giữ nguyên dữ liệu cũ. Ghi nối thêm vào cuối.\n")
-#         else:
-#             print(f"File '{os.path.basename(OUTPUT_CSV)}' đã tồn tại nhưng trống. Bắt đầu ghi.\n")
-#             csv_mode = 'w'
-    
-#     # Mở file CSV để ghi kết quả
-#     fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Tổng Tin Nhắn']
-#     with open(OUTPUT_CSV, mode=csv_mode, encoding='utf-8-sig', newline='') as csv_file:
-#         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        
-#         # Nếu tạo mới (hoặc xóa sạch), ghi timestamp + header
-#         if csv_mode == 'w':
-#             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-#             csv_file.write(f"# Thời gian chạy tool: {timestamp}\n")
-#             writer.writeheader()
-
-#         for file_path in json_files:
-#             file_name = os.path.basename(file_path)
-#             with open(file_path, 'r', encoding='utf-8') as f:
-#                 data = json.load(f)
-
-#             messages = data.get('messages', [])
-#             if not messages:
-#                 continue
-
-#             # Ghép lịch sử chat lại thành một đoạn văn bản ngắn gọn
-#             chat_text = ""
-#             for msg in messages:
-#                 # Chỉ lấy 1 đoạn hội thoại giới hạn để tiết kiệm token và chạy nhanh hơn
-#                 chat_text += f"{msg['sender']}: {msg['content']}\n"
-            
-#             print(f"Đang phân tích file: {file_name}...", end=" ", flush=True)
-#             start_time = time.time()
-#             ai_result = extract_info_with_ai(chat_text)
-#             elapsed_time = round(time.time() - start_time, 2)
-#             print(f"({elapsed_time}s)")
-            
-#             # Nếu AI không lấy được tên, dùng tạm tên trên Facebook
-#             ten_khach = ai_result.get('ten', '').strip()
-#             if not ten_khach:
-#                 ten_khach = data.get('customerName', '')
-
-#             writer.writerow({
-#                 'File Nguồn': file_name,
-#                 'Tên Khách Hàng': ten_khach,
-#                 'Số Điện Thoại': ai_result.get('sdt', ''),
-#                 'Địa Chỉ': ai_result.get('dia_chi', ''),
-#                 'Giá Chốt': ai_result.get('gia_chot', ''),
-#                 'Số Hộp': ai_result.get('so_hop', ''),
-#                 # 'Tổng Tin Nhắn': data.get('totalMessages', 0)
-#             })
-            
-#             print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop', '')}")
-            
-#             # Nghỉ 5s giữa các request để tránh quá tải API (Rate Limit)
-#             time.sleep(5)
-
-#     print(f"\n HOÀN TẤT! Toàn bộ thông tin đã được lưu ra file Excel: {OUTPUT_CSV}")
-
 def main():
-    # --- CẬP NHẬT: Loại bỏ các file đã có chữ "done_" ở đầu để không quét lại ---
     all_json = glob.glob(os.path.join(DATA_DIR, "*.json"))
     json_files = [f for f in all_json if not os.path.basename(f).startswith("done_")]
     
     if not json_files:
-        print("Không tìm thấy file JSON nào mới (chưa xử lý) trong thư mục data.")
+        print(f"Không tìm thấy file JSON nào mới trong: {DATA_DIR}")
         return
 
-    import datetime
     print(f"Tìm thấy {len(json_files)} file lịch sử chat. Bắt đầu dùng AI để phân tích...\n")
 
-    # Kiểm tra file CSV đã tồn tại chưa
-    csv_mode = 'w'  # Mặc định tạo mới
     if os.path.exists(OUTPUT_CSV):
-        # Đọc file để kiểm tra có data hay không
-        with open(OUTPUT_CSV, 'r', encoding='utf-8-sig') as check_file:
-            content = check_file.read().strip()
-            # Kiểm tra có dòng data nào không (bỏ qua header và dòng timestamp)
-            lines = [l for l in content.split('\n') if l.strip() and not l.startswith('#')]
-            has_data = len(lines) > 1  # Có nhiều hơn 1 dòng header = có data
-        
-        if has_data:
-            print(f"⚠️  File '{os.path.basename(OUTPUT_CSV)}' ĐÃ CÓ DỮ LIỆU!")
-            clear_choice = input("   Bạn có muốn XÓA SẠCH dữ liệu cũ trước khi chạy? (y/N): ").strip().lower()
-            if clear_choice == 'y':
-                csv_mode = 'w'
-                print("   → Đã xóa dữ liệu cũ. Bắt đầu ghi mới.\n")
-            else:
-                csv_mode = 'a'
-                print("   → Giữ nguyên dữ liệu cũ. Ghi nối thêm vào cuối.\n")
-        else:
-            print(f"File '{os.path.basename(OUTPUT_CSV)}' đã tồn tại nhưng trống. Bắt đầu ghi.\n")
-            csv_mode = 'w'
+        csv_mode = 'a'
+        print(f"File '{os.path.basename(OUTPUT_CSV)}' đã tồn tại → Ghi nối thêm.\n")
+    else:
+        csv_mode = 'w'
+        print(f"Tạo file kết quả mới: {os.path.basename(OUTPUT_CSV)}\n")
     
     # Mở file CSV để ghi kết quả
-    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Tổng Tin Nhắn']
+    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Lý Do Tính Số Hộp']
+    
+    # Check if we need to write header (csv_mode == 'w' or file is empty)
+    write_header = csv_mode == 'w' or os.path.getsize(OUTPUT_CSV) == 0
+    
     with open(OUTPUT_CSV, mode=csv_mode, encoding='utf-8-sig', newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         
-        # Nếu tạo mới (hoặc xóa sạch), ghi timestamp + header
-        if csv_mode == 'w':
+        if write_header:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             csv_file.write(f"# Thời gian chạy tool: {timestamp}\n")
             writer.writeheader()
@@ -295,10 +268,8 @@ def main():
             if not messages:
                 continue
 
-            # Ghép lịch sử chat lại thành một đoạn văn bản ngắn gọn
             chat_text = ""
             for msg in messages:
-                # Chỉ lấy 1 đoạn hội thoại giới hạn để tiết kiệm token và chạy nhanh hơn
                 chat_text += f"{msg['sender']}: {msg['content']}\n"
             
             print(f"Đang phân tích file: {file_name}...", end=" ", flush=True)
@@ -307,11 +278,11 @@ def main():
             elapsed_time = round(time.time() - start_time, 2)
             print(f"({elapsed_time}s)")
             
-            # Nếu AI không lấy được tên, dùng tạm tên trên Facebook
             ten_khach = ai_result.get('ten', '').strip()
             if not ten_khach:
                 ten_khach = data.get('customerName', '')
 
+            # Ghi thông tin chi tiết vào CSV
             writer.writerow({
                 'File Nguồn': file_name,
                 'Tên Khách Hàng': ten_khach,
@@ -319,23 +290,21 @@ def main():
                 'Địa Chỉ': ai_result.get('dia_chi', ''),
                 'Giá Chốt': ai_result.get('gia_chot', ''),
                 'Số Hộp': ai_result.get('so_hop', ''),
-                # 'Tổng Tin Nhắn': data.get('totalMessages', 0)
+                # 'Lý Do Tính Số Hộp': ai_result.get('ly_do_tinh_so_hop', '')
             })
             
             print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop', '')}")
             
-            # --- CẬP NHẬT: Đổi tên file để đánh dấu đã xử lý xong ---
+            # Đổi tên file sang "done_" để đánh dấu đã xử lý
             new_file_name = f"done_{file_name}"
             new_file_path = os.path.join(DATA_DIR, new_file_name)
             try:
-                # Phải đóng file trước khi đổi tên (đã đóng ở block 'with' bên trên rồi)
                 os.rename(file_path, new_file_path)
                 print(f" -> Đã đổi tên thành: {new_file_name}")
             except Exception as e:
                 print(f" -> Lỗi khi đổi tên file: {e}")
-            # --------------------------------------------------------
             
-            # Nghỉ 5s giữa các request để tránh quá tải API (Rate Limit)
+            # Nghỉ 5s để tránh Rate Limit
             time.sleep(5)
 
     print(f"\n HOÀN TẤT! Toàn bộ thông tin đã được lưu ra file Excel: {OUTPUT_CSV}")

@@ -3,33 +3,58 @@ import logging
 import json
 import os
 import datetime
+import sys
 from playwright.async_api import async_playwright
+
+# Đảm bảo luồng xuất nhập chuẩn (stdout/stderr) luôn dùng UTF-8 trên Windows
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
 
 # Constants
 DEBUG_PORT = 9222
 PAGES = {
-    "1": {"name": "Dây Thìa Canh", "url": "https://pancake.vn/571938736002434"},
-    "2": {"name": "Trà Đông Trùng", "url": "https://pancake.vn/941461145712453"},
+    "1": {"name": "Dây Thìa Canh", "folder": "DayThiaCanh", "url": "https://pancake.vn/571938736002434"},
+    "2": {"name": "Trà Đông Trùng", "folder": "TraDongTrung", "url": "https://pancake.vn/941461145712453"},
 }
 
-print("=" * 50)
-print(" CHỌN PAGE CẦN CÀO DỮ LIỆU")
-print("=" * 50)
-for key, val in PAGES.items():
-    print(f" {key}. {val['name']} ({val['url']})")
-page_choice = input("\nNhập số thứ tự để chọn (Mặc định 1): ").strip() or "1"
+# Tự động xác định thư mục gốc của dự án
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if os.path.basename(SCRIPT_DIR) == 'scripts':
+    WORKSPACE_DIR = os.path.dirname(SCRIPT_DIR)
+else:
+    WORKSPACE_DIR = SCRIPT_DIR
+
+# Nhận tham số dòng lệnh cho page_choice
+if len(sys.argv) > 1:
+    page_choice = sys.argv[1].strip()
+    print(f"Nhận tham số dòng lệnh page: {page_choice}")
+else:
+    print("=" * 50)
+    print(" CHỌN PAGE CẦN CÀO DỮ LIỆU")
+    print("=" * 50)
+    for key, val in PAGES.items():
+        print(f" {key}. {val['name']} ({val['url']})")
+    page_choice = input("\nNhập số thứ tự để chọn (Mặc định 1): ").strip() or "1"
+
 if page_choice not in PAGES:
     page_choice = "1"
-PANCAKE_URL = PAGES[page_choice]["url"]
-print(f"\n-> Đã chọn page: {PAGES[page_choice]['name']}")
+selected_page = PAGES[page_choice]
+PANCAKE_URL = selected_page["url"]
+PAGE_FOLDER = selected_page["folder"]
+print(f"\n-> Đã chọn page: {selected_page['name']}")
 print("-" * 50)
 
-WORKSPACE_DIR = r'F:\tool_cao_data'
+# Nhận tham số dòng lệnh ngày (date_choice) nếu được truyền từ Server
+if len(sys.argv) > 2:
+    today_str = sys.argv[2].strip()
+    print(f"Nhận tham số dòng lệnh ngày (date): {today_str}")
+else:
+    today_str = datetime.datetime.now().strftime("%d.%m.%y")
 
-# Create folders
-today_str = datetime.datetime.now().strftime("%d-%m")
 LOG_DIR = os.path.join(WORKSPACE_DIR, 'logs', today_str)
-DATA_DIR = os.path.join(WORKSPACE_DIR, 'data')
+DATA_DIR = os.path.join(WORKSPACE_DIR, 'data', PAGE_FOLDER, today_str)
 os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 
@@ -62,7 +87,7 @@ async def main():
             logger.warning(f"Chưa mở Chrome hoặc lỗi kết nối. Đang tự động gọi lệnh mở Chrome...")
             
             chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-            user_data_dir = r"F:\ToolPancake\chrome_debug_profile"
+            user_data_dir = os.path.join(WORKSPACE_DIR, "chrome_debug_profile")
             
             try:
                 # Mở Chrome dưới dạng process độc lập
@@ -104,8 +129,12 @@ async def main():
             await page.goto(PANCAKE_URL, wait_until='domcontentloaded', timeout=30000)
         else:
             logger.info(f"Đang dùng tab Pancake hiện tại: {page.url}")
-            logger.info("Tiến hành reload (tải lại) trang web...")
-            await page.reload(wait_until='domcontentloaded', timeout=30000)
+            if PANCAKE_URL not in page.url:
+                logger.info(f"Tab hiện tại KHÁC page đã chọn → Điều hướng tới: {PANCAKE_URL}")
+                await page.goto(PANCAKE_URL, wait_until='domcontentloaded', timeout=30000)
+            else:
+                logger.info("Tab đúng page đã chọn → Tiến hành reload (tải lại) trang web...")
+                await page.reload(wait_until='domcontentloaded', timeout=30000)
         
         logger.info("Đang chờ trang tải hoàn tất (5s)...")
         await page.wait_for_timeout(5000)
@@ -116,7 +145,6 @@ async def main():
             const tags = document.querySelectorAll('.filter-conversation-tag-tiled .tag-list-item');
             if (tags.length > 0) {
                 const firstTag = tags[0];
-                // Khi đã chọn, nó sẽ chuyển sang màu đậm hơn (thường là rgb(75, 85, 119))
                 if (firstTag.style.backgroundColor !== 'rgb(75, 85, 119)') {
                     firstTag.click();
                     return true; // đã click
@@ -180,6 +208,38 @@ async def main():
                 logger.info("Chờ nội dung chat load (2s)...")
                 await page.wait_for_timeout(2000)
 
+                # 2.5. KIỂM TRA TAG: CHỈ xử lý chat có DUY NHẤT tag "Kiểm hàng"
+                logger.info("Kiểm tra điều kiện tag...")
+                tag_check = await page.evaluate('''() => {
+                    const btns = Array.from(document.querySelectorAll('#listShowTags .btn-tag-item'));
+                    
+                    const isActive = (btn) => {
+                        if (!btn) return false;
+                        if (btn.querySelector('.ellipse') !== null) return true;
+                        const bg = btn.style.backgroundColor || '';
+                        if (bg.includes('rgba') && bg.includes('0.4')) return false;
+                        if (bg.includes('rgb')) return true;
+                        return false;
+                    };
+                    
+                    const activeTags = btns.filter(b => isActive(b));
+                    const activeTagNames = activeTags.map(b => b.textContent.trim().toLowerCase());
+                    
+                    // Chỉ xử lý khi có DUY NHẤT 1 tag active là "kiểm hàng"
+                    if (activeTags.length === 1 && activeTagNames.includes('kiểm hàng')) {
+                        return { status: 'ok' };
+                    }
+                    
+                    return { status: 'skip', tags: activeTagNames };
+                }''')
+                
+                if tag_check.get('status') == 'skip':
+                    skip_tags = tag_check.get('tags', [])
+                    logger.info(f"⏭️ BỎ QUA - Chat có tag: {skip_tags} (không phải chỉ 'Kiểm hàng')")
+                    continue
+
+                logger.info("✅ Chat chỉ có tag 'Kiểm hàng' → Tiến hành lấy dữ liệu.")
+
                 # 3. TRÍCH XUẤT DỮ LIỆU (CHỐNG LẶP & ĐÚNG NGƯỜI GỬI)
                 logger.info("Đang trích xuất dữ liệu chat...")
                 chat_info = await page.evaluate('''() => {
@@ -209,7 +269,6 @@ async def main():
                         const cls = String(el.getAttribute('class') || '').toLowerCase();
                         
                         let sender = customerName; // Mặc định là tên khách hàng
-                        // Phân biệt người gửi chính xác dựa vào class của Pancake
                         if (cls.includes('media-current-user')) {
                             sender = 'Tôi';
                         } else if (cls.includes('media-current-customer')) {
@@ -244,11 +303,11 @@ async def main():
                     "messages": messages
                 }
 
-                # Tên file an toàn (bỏ các ký tự đặc biệt)
+                # Tên file an toàn
                 safe_name = "".join([c for c in customer_name if c.isalpha() or c.isdigit() or c==' ']).rstrip()
                 if not safe_name: safe_name = f"chat_{chat_index}"
                 
-                json_filename = os.path.join(DATA_DIR, f"{chat_index}_{safe_name}_{today_str}.json")
+                json_filename = os.path.join(DATA_DIR, f"{chat_index}_{safe_name}.json")
                 with open(json_filename, 'w', encoding='utf-8') as f:
                     json.dump(output_data, f, ensure_ascii=False, indent=2)
 
@@ -268,29 +327,26 @@ async def main():
                 
                 if clicked_tag:
                     logger.info("Đã bấm gắn tag 'Mua hàng' thành công.")
-                    await page.wait_for_timeout(1500) # Đợi 1s để hệ thống lưu tag trước khi sang chat khác
+                    await page.wait_for_timeout(1500)
                 else:
                     logger.warning("Không tìm thấy nút tag 'Mua hàng' trên giao diện.")
 
             if new_chats_in_this_view == 0:
-                # Nếu không tìm thấy chat mới nào trên màn hình, thử cuộn xuống và đếm số lần thử
                 scroll_attempts += 1
                 logger.info(f"Không tìm thấy chat mới, đang thử cuộn xuống... (lần {scroll_attempts}/3)")
             else:
-                # Reset số lần cuộn vì vừa tìm thấy thêm chat mới
                 scroll_attempts = 0
                 
             # Thực hiện cuộn sidebar xuống dưới
             await page.evaluate('''() => {
                 const holder = document.querySelector('.rc-virtual-list-holder');
                 if (holder) {
-                    holder.scrollTop += 800; // Cuộn xuống khoảng 1 trang
+                    holder.scrollTop += 800;
                 } else {
                     const fallback = document.querySelector('.conversation-list-item')?.closest('div[style*="overflow"]');
                     if(fallback) fallback.scrollTop += 800;
                 }
             }''')
-            # Đợi cho danh sách ảo render các phần tử mới
             await page.wait_for_timeout(1500)
 
         logger.info("=" * 50)

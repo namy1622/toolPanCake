@@ -1,8 +1,15 @@
 import asyncio
 import logging
 import os
+import sys
 from playwright.async_api import async_playwright
 import subprocess
+
+# Đảm bảo luồng xuất dữ liệu luôn dùng UTF-8 trên Windows để tránh lỗi CP1252
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
 
 # Cấu hình log
 logging.basicConfig(
@@ -12,7 +19,38 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 DEBUG_PORT = 9222
-PANCAKE_URL = 'https://pancake.vn/941461145712453'
+
+# Tự động xác định thư mục gốc của dự án
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if os.path.basename(SCRIPT_DIR) == 'scripts':
+    WORKSPACE_DIR = os.path.dirname(SCRIPT_DIR)
+else:
+    WORKSPACE_DIR = SCRIPT_DIR
+
+# Danh sách page
+PAGES = {
+    "1": {"name": "Dây Thìa Canh", "url": "https://pancake.vn/571938736002434"},
+    "2": {"name": "Trà Đông Trùng", "url": "https://pancake.vn/941461145712453"},
+}
+
+# Nhận tham số dòng lệnh cho page_choice
+if len(sys.argv) > 1:
+    page_choice = sys.argv[1].strip()
+    print(f"Nhận tham số dòng lệnh page: {page_choice}")
+else:
+    print("=" * 50)
+    print(" CHỌN PAGE CẦN BỎ TAG 'KIỂM HÀNG'")
+    print("=" * 50)
+    for key, val in PAGES.items():
+        print(f" {key}. {val['name']} ({val['url']})")
+    page_choice = input("\nNhập số thứ tự để chọn (Mặc định 1): ").strip() or "1"
+
+if page_choice not in PAGES:
+    page_choice = "1"
+selected_page = PAGES[page_choice]
+PANCAKE_URL = selected_page["url"]
+print(f"\n-> Đã chọn page: {selected_page['name']}")
+print("-" * 50)
 
 async def main():
     logger.info("=" * 50)
@@ -27,7 +65,7 @@ async def main():
         except Exception as e:
             logger.warning(f"Chưa mở Chrome hoặc lỗi kết nối. Đang tự động gọi lệnh mở Chrome...")
             chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-            user_data_dir = r"F:\ToolPancake\chrome_debug_profile"
+            user_data_dir = os.path.join(WORKSPACE_DIR, "chrome_debug_profile")
             try:
                 subprocess.Popen([
                     chrome_path,
@@ -64,8 +102,12 @@ async def main():
             await page.goto(PANCAKE_URL, wait_until='domcontentloaded', timeout=30000)
         else:
             logger.info(f"Đang dùng tab Pancake hiện tại: {page.url}")
-            logger.info("Tiến hành reload (tải lại) trang web...")
-            await page.reload(wait_until='domcontentloaded', timeout=30000)
+            if PANCAKE_URL not in page.url:
+                logger.info(f"Tab hiện tại KHÁC page đã chọn → Điều hướng tới: {PANCAKE_URL}")
+                await page.goto(PANCAKE_URL, wait_until='domcontentloaded', timeout=30000)
+            else:
+                logger.info("Tab đúng page đã chọn → Tiến hành reload (tải lại) trang web...")
+                await page.reload(wait_until='domcontentloaded', timeout=30000)
         
         logger.info("Đang chờ trang tải hoàn tất (3s)...")
         await page.wait_for_timeout(3000)
@@ -94,30 +136,19 @@ async def main():
             logger.warning("Không tìm thấy bộ lọc hình vuông trên màn hình.")
 
         # 2. VÒNG LẶP XỬ LÝ TỪNG CHAT TRÊN SIDEBAR
-        # LOGIC QUAN TRỌNG:
-        # - Khi bỏ tích "Kiểm hàng" thành công → chat đó BIẾN MẤT khỏi sidebar (vì không còn khớp bộ lọc)
-        #   → sidebar TỰ ĐỘNG chọn chat tiếp theo → KHÔNG cần click thêm gì.
-        # - Khi BỎ QUA (skip) chat → chat đó VẪN CÒN trên sidebar → phải TỰ TAY click chat tiếp theo bên dưới.
         logger.info("Bắt đầu quét danh sách đoạn chat trên sidebar...")
         
         chat_index = 0
         unchecked_count = 0
         skipped_count = 0
         no_more_chat_attempts = 0
-        # skip_offset: Số chat đã bỏ qua (vẫn còn trên sidebar).
-        # Dùng để biết cần click vào chat ở vị trí nào.
-        # Ví dụ: skip_offset=0 → click chat đầu tiên (index 0)
-        #         skip_offset=2 → đã bỏ qua 2 chat phía trên, click chat ở index 2
         skip_offset = 0
 
         while no_more_chat_attempts < 3:
-            # Lấy danh sách chat hiện tại trên sidebar
             chat_locators = page.locator('.conversation-list-item')
             count = await chat_locators.count()
             
-            # Kiểm tra xem còn chat nào ở vị trí skip_offset không
             if skip_offset >= count:
-                # Đã hết chat trong tầm nhìn, thử cuộn xuống
                 no_more_chat_attempts += 1
                 logger.info(f"Đã hết chat trong tầm nhìn. Thử cuộn xuống... (lần {no_more_chat_attempts}/3)")
                 await page.evaluate('''() => {
@@ -158,22 +189,18 @@ async def main():
                     return false;
                 };
                 
-                // Đếm tổng số tag đang active
                 const activeTags = btns.filter(b => isActive(b));
                 const activeTagNames = activeTags.map(b => b.textContent.trim().toLowerCase());
                 
-                // Tìm 2 tag cần kiểm tra
                 const hasMuaHang = activeTagNames.includes('mua hàng');
                 const hasKiemHang = activeTagNames.includes('kiểm hàng');
                 
-                // CHỈ bỏ tích khi có ĐÚNG 2 tag active là "Mua hàng" + "Kiểm hàng"
                 if (hasMuaHang && hasKiemHang && activeTags.length === 2) {
                     const kiemHangBtn = btns.find(b => b.textContent.trim().toLowerCase() === 'kiểm hàng');
                     kiemHangBtn.click();
                     return 'unchecked';
                 }
                 
-                // Các trường hợp bỏ qua
                 if (hasKiemHang && !hasMuaHang) return 'skip_only_kiem';
                 if (hasMuaHang && hasKiemHang && activeTags.length > 2) return 'skip_extra_tags';
                 if (!hasKiemHang) return 'skip_no_kiem';
@@ -183,21 +210,7 @@ async def main():
             if tag_status == 'unchecked':
                 unchecked_count += 1
                 logger.info(f"✅ Đã BỎ TÍCH 'Kiểm hàng' thành công! (Tổng: {unchecked_count})")
-                # SAU KHI BỎ TÍCH: Chờ cho đến khi chat THẬT SỰ biến mất khỏi sidebar
-                # (tránh lỗi vòng lặp tiếp theo click lại chat cũ vì nó chưa kịp biến mất)
-                # count_before = count
-                # for wait_i in range(10):  # Tối đa chờ 5 giây (10 x 500ms)
-                #     await page.wait_for_timeout(500)
-                #     new_count = await page.locator('.conversation-list-item').count()
-                #     if new_count < count_before:
-                #         logger.info(f"   Sidebar đã cập nhật ({count_before} → {new_count} chat).")
-                #         break
-                # else:
-                #     logger.warning("   Sidebar chưa cập nhật sau 5s, tiếp tục...")
-                
             else:
-                # BỎ QUA: Chat vẫn còn trên sidebar.
-                # → Tăng skip_offset để lần sau nhảy qua chat này, click chat ở vị trí tiếp theo.
                 skipped_count += 1
                 
                 if tag_status == 'skip_only_kiem':
