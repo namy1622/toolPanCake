@@ -1,10 +1,8 @@
 import os
 import json
-import requests
 import csv
 import glob
 import sys
-import re
 import time
 import datetime
 
@@ -20,6 +18,10 @@ if os.path.basename(SCRIPT_DIR) == 'scripts':
     WORKSPACE_DIR = os.path.dirname(SCRIPT_DIR)
 else:
     WORKSPACE_DIR = SCRIPT_DIR
+
+# Import các module AI riêng biệt
+from ai_extract_info import extract_info_with_ai
+from ai_extract_address import extract_address_with_ai
 
 # Danh sách page
 PAGES = {
@@ -127,107 +129,6 @@ OUTPUT_DIR = os.path.join(WORKSPACE_DIR, "output", PAGE_FOLDER)
 OUTPUT_CSV = os.path.join(OUTPUT_DIR, f"{today_str}.csv")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-def extract_info_with_ai(chat_text):
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
-
-    system_prompt = """Bạn là trợ lý trích xuất thông tin khách hàng từ đoạn chat mua hàng. Nhiệm vụ: Tìm và trích xuất Tên khách hàng, Số điện thoại, Địa chỉ, Giá chốt cuối cùng, và Số hộp.
-QUY TẮC TỐI THƯỢNG:
-1. Bạn phải COPY Y HỆT từng chữ cái từ tin nhắn của khách cho phần Tên và Địa chỉ.
-2. TUYỆT ĐỐI KHÔNG viết hoa chữ cái đầu nếu khách không viết.
-3. TUYỆT ĐỐI KHÔNG sửa lỗi chính tả, không tự thêm/bớt từ.
-4. KHÔNG tự suy luận địa danh.
-5. ĐỊNH DẠNG SỐ HỘP: Bạn bắt buộc phải phân tích kỹ tin nhắn chốt đơn cuối cùng của "Tôi" (Người bán) và ghi ra trường "ly_do_tinh_so_hop" thật ngắn gọn, đủ ý nghĩa trước.
-- RẤT QUAN TRỌNG: Nếu có khuyến mãi, phải cộng dồn vào! (Ví dụ: Mua 3 tặng 1 -> 4 hộp; Mua 5 tặng 2 -> 7 hộp; Mua 4 tặng 1 -> 5 hộp; Mua 2 tặng 1 -> 3 hộp).
-- Sau khi phân tích xong, mới ghi tổng số hộp thực tế khách nhận vào trường "so_hop" theo định dạng "1h", "2h", "4h", "7h"...
-
---- VÍ DỤ 1 ---
-Khách: gui ve dia chi 123 le loi q1 nhe e 0901234567. minh lay 2 hop nhe, 
-Tôi: 3 hộp là 240k miễn ship. Mua 3 tặng 1 (tổng nhận 4 hộp).
-Assistant:
-{
-  "ten": "",
-  "sdt": "0901234567",
-  "dia_chi": "123 le loi q1",
-  "gia_chot": "240000",
-  "ly_do_tinh_so_hop": "Người bán (Tôi) chốt cuối cùng là 3 hộp 240k, áp dụng mua 3 tặng 1. Tổng cộng khách nhận 4 hộp.",
-  "so_hop": "4h"
-}
---- KẾT QUẢ TRẢ VỀ ---
-Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
-{
-  "ten": "",
-  "sdt": "",
-  "dia_chi": "",
-  "gia_chot": "",
-  "ly_do_tinh_so_hop": "",
-  "so_hop": ""
-}
-"""
-
-    payload = {
-        "model": MODEL,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"Đoạn chat:\n{chat_text}\n\nLưu ý: Bạn BẮT BUỘC phải xuất kết quả ở dạng JSON thuần túy (không giải thích, không tóm tắt, không phân tích, không thêm bất kỳ chữ nào ngoài JSON). Mẫu:\n{{\n  \"ten\": \"\",\n  \"sdt\": \"\",\n  \"dia_chi\": \"\",\n  \"gia_chot\": \"\",\n  \"ly_do_tinh_so_hop\": \"\",\n  \"so_hop\": \"\"\n}}"}
-        ],
-        "temperature": 0.1,
-    }
-
-    fallback_delays = [5, 3, 6, 10]
-    max_retries = len(fallback_delays)
-    
-    for attempt in range(max_retries + 1):
-        try:
-            response = requests.post(API_URL, headers=headers, json=payload, timeout=90)
-            response.raise_for_status()
-            result = response.json()
-            
-            content = result['choices'][0]['message']['content']
-            
-            match = re.search(r'\{[\s\S]*\}', content)
-            if match:
-                json_str = match.group(0)
-                return json.loads(json_str)
-            else:
-                return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
-                
-        except requests.exceptions.HTTPError as e:
-            if 'response' in locals() and response.status_code == 429:
-                if attempt >= max_retries:
-                    break
-                    
-                wait_time = fallback_delays[attempt]
-                
-                try:
-                    error_msg = response.json().get('error', {}).get('message', '')
-                    time_match = re.search(r'try again in (\d+\.?\d*)s', error_msg)
-                    if time_match:
-                        groq_wait = float(time_match.group(1)) + 1.0
-                        if groq_wait > wait_time:
-                            wait_time = groq_wait
-                except:
-                    pass
-                
-                print(f"\n [!] Quá tải API. Đang chờ {wait_time:.1f}s để thử lại (Lần {attempt+1}/{max_retries})...", end=" ", flush=True)
-                time.sleep(wait_time)
-                continue
-            else:
-                print(f"\nLỗi khi gọi API: {e}")
-                if 'response' in locals() and hasattr(response, 'text'):
-                    print(f"Chi tiết response: {response.text}")
-                return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
-        except Exception as e:
-            print(f"\nLỗi khi gọi API: {e}")
-            if 'response' in locals() and hasattr(response, 'text'):
-                print(f"Chi tiết response: {response.text}")
-            return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
-            
-    print(f"\n [!] Bỏ cuộc sau {max_retries} lần thử nghiệm. Bỏ qua file này.")
-    return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
-
 def main():
     all_json = glob.glob(os.path.join(DATA_DIR, "*.json"))
     json_files = [f for f in all_json if not os.path.basename(f).startswith("done_")]
@@ -245,8 +146,8 @@ def main():
         csv_mode = 'w'
         print(f"Tạo file kết quả mới: {os.path.basename(OUTPUT_CSV)}\n")
     
-    # Mở file CSV để ghi kết quả
-    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Lý Do Tính Số Hộp']
+    # Mở file CSV để ghi kết quả (thêm 3 cột mới: Tỉnh/Thành, Quận/Huyện, Phường/Xã)
+    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Tỉnh/Thành', 'Quận/Huyện', 'Phường/Xã', 'Giá Chốt', 'Số Hộp', 'Lý Do Tính Số Hộp']
     
     # Check if we need to write header (csv_mode == 'w' or file is empty)
     write_header = csv_mode == 'w' or os.path.getsize(OUTPUT_CSV) == 0
@@ -272,9 +173,10 @@ def main():
             for msg in messages:
                 chat_text += f"{msg['sender']}: {msg['content']}\n"
             
-            print(f"Đang phân tích file: {file_name}...", end=" ", flush=True)
+            # ── BƯỚC 1: Gọi AI trích xuất thông tin khách hàng ──
+            print(f"[Bước 1] Đang phân tích thông tin KH từ file: {file_name}...", end=" ", flush=True)
             start_time = time.time()
-            ai_result = extract_info_with_ai(chat_text)
+            ai_result = extract_info_with_ai(chat_text, API_KEY, API_URL, MODEL)
             elapsed_time = round(time.time() - start_time, 2)
             print(f"({elapsed_time}s)")
             
@@ -282,18 +184,36 @@ def main():
             if not ten_khach:
                 ten_khach = data.get('customerName', '')
 
-            # Ghi thông tin chi tiết vào CSV
+            dia_chi = ai_result.get('dia_chi', '')
+            
+            print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {dia_chi} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop', '')}")
+            
+            # ── BƯỚC 2: Gọi AI trích xuất Tỉnh/Huyện/Xã từ địa chỉ ──
+            print(f"[Bước 2] Đang phân tích địa chỉ → Tỉnh/Huyện/Xã...", end=" ", flush=True)
+            start_time_addr = time.time()
+            addr_result = extract_address_with_ai(dia_chi, API_KEY, API_URL, MODEL)
+            elapsed_time_addr = round(time.time() - start_time_addr, 2)
+            print(f"({elapsed_time_addr}s)")
+            
+            tinh = addr_result.get('tinh', '')
+            huyen = addr_result.get('huyen', '')
+            xa = addr_result.get('xa', '')
+            
+            print(f" -> Tỉnh: {tinh} | Huyện: {huyen} | Xã: {xa}")
+
+            # ── Ghi thông tin chi tiết vào CSV ──
             writer.writerow({
                 'File Nguồn': file_name,
                 'Tên Khách Hàng': ten_khach,
                 'Số Điện Thoại': ai_result.get('sdt', ''),
-                'Địa Chỉ': ai_result.get('dia_chi', ''),
+                'Địa Chỉ': dia_chi,
+                'Tỉnh/Thành': tinh,
+                'Quận/Huyện': huyen,
+                'Phường/Xã': xa,
                 'Giá Chốt': ai_result.get('gia_chot', ''),
                 'Số Hộp': ai_result.get('so_hop', ''),
                 # 'Lý Do Tính Số Hộp': ai_result.get('ly_do_tinh_so_hop', '')
             })
-            
-            print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop', '')}")
             
             # Đổi tên file sang "done_" để đánh dấu đã xử lý
             new_file_name = f"done_{file_name}"
@@ -304,8 +224,9 @@ def main():
             except Exception as e:
                 print(f" -> Lỗi khi đổi tên file: {e}")
             
-            # Nghỉ 5s để tránh Rate Limit
-            time.sleep(5)
+            # Nghỉ 3s trước khi xử lý đoạn chat tiếp theo
+            print(f" -> Nghỉ 3s trước khi tiếp tục...\n")
+            time.sleep(3)
 
     print(f"\n HOÀN TẤT! Toàn bộ thông tin đã được lưu ra file Excel: {OUTPUT_CSV}")
 

@@ -206,6 +206,30 @@ function parseQuantity(qtyStr) {
     return null;
 }
 
+// Helper to check if a Province/District/Ward value matches within the address string
+function checkAddressMatch(address, fieldValue) {
+    if (!fieldValue || fieldValue.trim() === '' || !address || address.trim() === '') return true;
+    const normalize = s => s.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove Vietnamese diacritics
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+        .replace(/\s+/g, ' ').trim();
+    const normalizedAddr = normalize(address);
+    const normalizedField = normalize(fieldValue);
+    // Try direct substring match
+    if (normalizedAddr.includes(normalizedField)) return true;
+    // Try matching individual significant words (skip common prefixes like tinh/huyen/xa/quan/phuong/thi xa/thanh pho)
+    const prefixes = ['tinh', 'thanh pho', 'tp', 'quan', 'huyen', 'thi xa', 'tx', 'phuong', 'xa', 'thi tran', 'tt'];
+    let cleanedField = normalizedField;
+    for (const prefix of prefixes) {
+        if (cleanedField.startsWith(prefix + ' ')) {
+            cleanedField = cleanedField.slice(prefix.length).trim();
+            break;
+        }
+    }
+    if (cleanedField && normalizedAddr.includes(cleanedField)) return true;
+    return false;
+}
+
 // Helper to validate price against quantity
 function validatePriceAndQuantity(price, qty) {
     if (price === 0 || qty === null) return true; // Empty checks handle this
@@ -243,7 +267,7 @@ async function loadCsvData() {
         if (data.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="table-placeholder">Chưa có dữ liệu trích xuất cho ngày làm việc này. Hãy bấm "Chạy Phân Tích AI" để bắt đầu lọc dữ liệu.</td>
+                    <td colspan="9" class="table-placeholder">Chưa có dữ liệu trích xuất cho ngày làm việc này. Hãy bấm "Chạy Phân Tích AI" để bắt đầu lọc dữ liệu.</td>
                 </tr>
             `;
             return;
@@ -294,10 +318,22 @@ async function loadCsvData() {
                 qtyClass = 'cell-danger-mismatch';
             }
 
+            // Đối chiếu Tỉnh/Huyện/Xã với chuỗi Địa Chỉ gốc
+            const provinceMatch = checkAddressMatch(row.address, row.province);
+            const districtMatch = checkAddressMatch(row.address, row.district);
+            const wardMatch = checkAddressMatch(row.address, row.ward);
+
+            const provinceClass = (!row.province || row.province.trim() === '') ? '' : (provinceMatch ? '' : 'cell-address-mismatch');
+            const districtClass = (!row.district || row.district.trim() === '') ? '' : (districtMatch ? '' : 'cell-address-mismatch');
+            const wardClass = (!row.ward || row.ward.trim() === '') ? '' : (wardMatch ? '' : 'cell-address-mismatch');
+
             tr.innerHTML = `
                 <td class="${nameClass}"><strong>${row.name || 'Chưa rõ'}</strong></td>
                 <td class="${phoneClass}"><span class="text-cyan">${cleanPhone || 'Chưa rõ'}</span></td>
                 <td class="${addressClass}" title="${row.address}">${row.address || 'Chưa rõ'}</td>
+                <td class="${provinceClass}">${row.province || ''}</td>
+                <td class="${districtClass}">${row.district || ''}</td>
+                <td class="${wardClass}">${row.ward || ''}</td>
                 <td class="${priceClass}"><span class="text-green">${formatPrice(row.price)}đ</span></td>
                 <td class="${qtyClass}"><span class="file-badge done">${row.quantity || '-'}</span></td>
                 <td>
@@ -336,7 +372,7 @@ async function loadCsvData() {
     } catch (e) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="table-placeholder text-red">Lỗi tải dữ liệu CSV: ${e.message}</td>
+                <td colspan="9" class="table-placeholder text-red">Lỗi tải dữ liệu CSV: ${e.message}</td>
             </tr>
         `;
     }

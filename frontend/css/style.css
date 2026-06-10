@@ -1279,4 +1279,15 @@ body {
 .cell-danger-mismatch .file-badge {
     background-color: var(--red-dim) !important;
     color: var(--red-glow) !important;
+}
+
+/* Address Province/District/Ward mismatch warning - value doesn't match address string */
+.cell-address-mismatch {
+    background-color: rgba(251, 146, 60, 0.2) !important;
+    border: 1px solid rgba(251, 146, 60, 0.35) !important;
+}
+.cell-address-mismatch,
+.cell-address-mismatch * {
+    color: #fb923c !important;
+    text-shadow: 0 0 4px rgba(251, 146, 60, 0.3);
 }

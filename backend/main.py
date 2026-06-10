@@ -192,6 +192,9 @@ async def get_csv(page: str, date: str):
                     "name": row.get("Tên Khách Hàng", ""),
                     "phone": row.get("Số Điện Thoại", ""),
                     "address": row.get("Địa Chỉ", ""),
+                    "province": row.get("Tỉnh/Thành", ""),
+                    "district": row.get("Quận/Huyện", ""),
+                    "ward": row.get("Phường/Xã", ""),
                     "price": row.get("Giá Chốt", ""),
                     "quantity": row.get("Số Hộp", ""),
                     "reason": row.get("Lý Do Tính Số Hộp", row.get("Tổng Tin Nhắn", "")) # Backward compatibility
