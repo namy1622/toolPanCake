@@ -187,6 +187,47 @@ function appendExtractLog(text) {
     }
 }
 
+// Helper to parse price string to number
+function parsePrice(priceStr) {
+    if (!priceStr) return 0;
+    const clean = priceStr.toString().replace(/[^0-9]/g, '');
+    const num = parseInt(clean);
+    return isNaN(num) ? 0 : num;
+}
+
+// Helper to parse quantity string to integer box count
+function parseQuantity(qtyStr) {
+    if (!qtyStr) return null;
+    const clean = qtyStr.toString().trim().toLowerCase();
+    const match = clean.match(/(\d+)/);
+    if (match) {
+        return parseInt(match[1]);
+    }
+    return null;
+}
+
+// Helper to validate price against quantity
+function validatePriceAndQuantity(price, qty) {
+    if (price === 0 || qty === null) return true; // Empty checks handle this
+    
+    // Correct price list for each box count
+    const validMap = {
+        1: [100000, 110000, 120000, 1100000],
+        2: [150000, 160000, 200000],
+        4: [240000],
+        5: [350000, 380000, 400000, 3800000],
+        6: [300000, 320000],
+        7: [350000, 400000],
+        8: [350000, 400000],
+        10: [500000]
+    };
+    
+    if (validMap[qty]) {
+        return validMap[qty].includes(price);
+    }
+    return false;
+}
+
 // Fetch and load parsed CSV data table
 async function loadCsvData() {
     const tbody = document.getElementById('extracted-customers-body');
@@ -218,12 +259,47 @@ async function loadCsvData() {
                 cleanPhone = cleanPhone.slice(1);
             }
 
+            const parsedPrice = parsePrice(row.price);
+            const parsedQty = parseQuantity(row.quantity);
+
+            // Validation checks
+            const isNameEmpty = !row.name || row.name.trim() === '' || row.name.trim() === 'Chưa rõ';
+            const isPhoneEmpty = !cleanPhone || cleanPhone.trim() === '' || cleanPhone.trim() === 'Chưa rõ';
+            const isAddressEmpty = !row.address || row.address.trim() === '' || row.address.trim() === 'Chưa rõ';
+            const isPriceEmpty = !row.price || row.price.trim() === '' || row.price.trim() === 'Chưa rõ' || parsedPrice === 0;
+            const isQtyEmpty = !row.quantity || row.quantity.trim() === '' || row.quantity.trim() === 'Chưa rõ' || row.quantity.trim() === '-' || parsedQty === null;
+
+            // Price vs Quantity validation
+            let hasMismatch = false;
+            if (!isPriceEmpty && !isQtyEmpty) {
+                hasMismatch = !validatePriceAndQuantity(parsedPrice, parsedQty);
+            }
+
+            // Cell styling classes
+            const nameClass = isNameEmpty ? 'cell-warning-empty' : '';
+            const phoneClass = isPhoneEmpty ? 'cell-warning-empty' : '';
+            const addressClass = isAddressEmpty ? 'cell-warning-empty' : '';
+            
+            let priceClass = '';
+            if (isPriceEmpty) {
+                priceClass = 'cell-warning-empty';
+            } else if (hasMismatch) {
+                priceClass = 'cell-danger-mismatch';
+            }
+
+            let qtyClass = '';
+            if (isQtyEmpty) {
+                qtyClass = 'cell-warning-empty';
+            } else if (hasMismatch) {
+                qtyClass = 'cell-danger-mismatch';
+            }
+
             tr.innerHTML = `
-                <td><strong>${row.name || 'Chưa rõ'}</strong></td>
-                <td><span class="text-cyan">${cleanPhone || 'Chưa rõ'}</span></td>
-                <td title="${row.address}">${row.address || 'Chưa rõ'}</td>
-                <td><span class="text-green">${formatPrice(row.price)}đ</span></td>
-                <td><span class="file-badge done">${row.quantity || '-'}</span></td>
+                <td class="${nameClass}"><strong>${row.name || 'Chưa rõ'}</strong></td>
+                <td class="${phoneClass}"><span class="text-cyan">${cleanPhone || 'Chưa rõ'}</span></td>
+                <td class="${addressClass}" title="${row.address}">${row.address || 'Chưa rõ'}</td>
+                <td class="${priceClass}"><span class="text-green">${formatPrice(row.price)}đ</span></td>
+                <td class="${qtyClass}"><span class="file-badge done">${row.quantity || '-'}</span></td>
                 <td>
                     <button class="btn btn-xs btn-view-detail">Mở chat</button>
                 </td>

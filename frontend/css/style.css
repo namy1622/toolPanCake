@@ -1251,3 +1251,32 @@ body {
         transform: translateX(0) scale(1);
     }
 }
+
+/* CSV Table Cell Data Validation Warnings */
+.cell-warning-empty {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    border: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+.cell-warning-empty,
+.cell-warning-empty * {
+    color: #fbbf24 !important;
+    text-shadow: 0 0 4px rgba(251, 191, 36, 0.3);
+}
+.cell-warning-empty .file-badge {
+    background-color: var(--yellow-dim) !important;
+    color: var(--yellow-glow) !important;
+}
+
+.cell-danger-mismatch {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+}
+.cell-danger-mismatch,
+.cell-danger-mismatch * {
+    color: #f87171 !important;
+    text-shadow: 0 0 4px rgba(248, 113, 113, 0.3);
+}
+.cell-danger-mismatch .file-badge {
+    background-color: var(--red-dim) !important;
+    color: var(--red-glow) !important;
+}
