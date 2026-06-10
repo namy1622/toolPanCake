@@ -3,3 +3,4 @@ output/*
 chrome_debug_profile/
 logs/
 appsettings.json
+chrome_debug_profile/*
