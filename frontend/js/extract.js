@@ -277,7 +277,8 @@ async function loadCsvData() {
 
             // Cell styling classes
             const nameClass = isNameEmpty ? 'cell-warning-empty' : '';
-            const phoneClass = isPhoneEmpty ? 'cell-warning-empty' : '';
+            const isPhoneFlagged = cleanPhone === '0971838082';
+            const phoneClass = isPhoneEmpty ? 'cell-warning-empty' : (isPhoneFlagged ? 'cell-phone-flagged' : '');
             const addressClass = isAddressEmpty ? 'cell-warning-empty' : '';
             
             let priceClass = '';

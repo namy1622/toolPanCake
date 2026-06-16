@@ -56,6 +56,8 @@ if page_choice not in PAGES:
 selected_page = PAGES[page_choice]
 PAGE_FOLDER = selected_page["folder"]
 print(f"\n-> Đã chọn page: {selected_page['name']}")
+PROMPT_UNIT_LABEL = {"1": "kg (Dây Thìa Canh)", "2": "hộp (Trà Đông Trùng)"}
+print(f"-> Prompt AI sẽ dùng đơn vị: {PROMPT_UNIT_LABEL.get(page_choice, 'mặc định hộp')}")
 print("-" * 50)
 
 # Đọc cấu hình AI từ appsettings.json
@@ -133,45 +135,30 @@ def extract_info_with_ai(chat_text):
         "Content-Type": "application/json"
     }
 
-    system_prompt = """Bạn là trợ lý trích xuất thông tin khách hàng từ đoạn chat mua hàng. Nhiệm vụ: Tìm và trích xuất Tên khách hàng, Số điện thoại, Địa chỉ, Giá chốt cuối cùng, và Số hộp.
-QUY TẮC TỐI THƯỢNG:
-1. Bạn phải COPY Y HỆT từng chữ cái từ tin nhắn của khách cho phần Tên và Địa chỉ.
-2. TUYỆT ĐỐI KHÔNG viết hoa chữ cái đầu nếu khách không viết.
-3. TUYỆT ĐỐI KHÔNG sửa lỗi chính tả, không tự thêm/bớt từ.
-4. KHÔNG tự suy luận địa danh.
-5. ĐỊNH DẠNG SỐ HỘP: Bạn bắt buộc phải phân tích kỹ tin nhắn chốt đơn cuối cùng của "Tôi" (Người bán) và ghi ra trường "ly_do_tinh_so_hop" thật ngắn gọn, đủ ý nghĩa trước.
-- RẤT QUAN TRỌNG: Nếu có khuyến mãi, phải cộng dồn vào! (Ví dụ: Mua 3 tặng 1 -> 4 hộp; Mua 5 tặng 2 -> 7 hộp; Mua 4 tặng 1 -> 5 hộp; Mua 2 tặng 1 -> 3 hộp).
-- Sau khi phân tích xong, mới ghi tổng số hộp thực tế khách nhận vào trường "so_hop" theo định dạng "1h", "2h", "4h", "7h"...
+    # Đọc prompt từ file bên ngoài (folder prompts/ ở thư mục gốc dự án)
+    # Page "1" = Dây Thìa Canh → prompt_day.txt (đơn vị kg)
+    # Page "2" = Trà Đông Trùng → prompt_tra.txt (đơn vị hộp)
+    PROMPT_FILE_MAP = {
+        "1": os.path.join(WORKSPACE_DIR, "prompts", "prompt_day.txt"),
+        "2": os.path.join(WORKSPACE_DIR, "prompts", "prompt_tra.txt"),
+    }
+    prompt_file = PROMPT_FILE_MAP.get(page_choice, PROMPT_FILE_MAP["2"])
 
---- VÍ DỤ 1 ---
-Khách: gui ve dia chi 123 le loi q1 nhe e 0901234567. minh lay 2 hop nhe, 
-Tôi: 3 hộp là 240k miễn ship. Mua 3 tặng 1 (tổng nhận 4 hộp).
-Assistant:
-{
-  "ten": "",
-  "sdt": "0901234567",
-  "dia_chi": "123 le loi q1",
-  "gia_chot": "240000",
-  "ly_do_tinh_so_hop": "Người bán (Tôi) chốt cuối cùng là 3 hộp 240k, áp dụng mua 3 tặng 1. Tổng cộng khách nhận 4 hộp.",
-  "so_hop": "4h"
-}
---- KẾT QUẢ TRẢ VỀ ---
-Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
-{
-  "ten": "",
-  "sdt": "",
-  "dia_chi": "",
-  "gia_chot": "",
-  "ly_do_tinh_so_hop": "",
-  "so_hop": ""
-}
-"""
+    try:
+        with open(prompt_file, 'r', encoding='utf-8') as pf:
+            selected_prompt = pf.read()
+        print(f"  -> Đã tải prompt từ file: {os.path.basename(prompt_file)}")
+    except FileNotFoundError:
+        print(f"  [!] CẢNH BÁO: Không tìm thấy file prompt: {prompt_file}")
+        print(f"  [!] Hãy kiểm tra folder 'prompts/' trong thư mục dự án.")
+        return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh": "", "so_hop/so_kg": ""}
+
 
     payload = {
         "model": MODEL,
         "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"Đoạn chat:\n{chat_text}\n\nLưu ý: Bạn BẮT BUỘC phải xuất kết quả ở dạng JSON thuần túy (không giải thích, không tóm tắt, không phân tích, không thêm bất kỳ chữ nào ngoài JSON). Mẫu:\n{{\n  \"ten\": \"\",\n  \"sdt\": \"\",\n  \"dia_chi\": \"\",\n  \"gia_chot\": \"\",\n  \"ly_do_tinh_so_hop\": \"\",\n  \"so_hop\": \"\"\n}}"}
+            {"role": "system", "content": selected_prompt},
+            {"role": "user", "content": f"Đoạn chat:\n{chat_text}\n\nLưu ý: Bạn BẮT BUỘC phải xuất kết quả ở dạng JSON thuần túy (không giải thích, không tóm tắt, không phân tích, không thêm bất kỳ chữ nào ngoài JSON). Mẫu:\n{{\n  \"ten\": \"\",\n  \"sdt\": \"\",\n  \"dia_chi\": \"\",\n  \"gia_chot\": \"\",\n  \"ly_do_tinh\": \"\",\n  \"so_hop/so_kg\": \"\"\n}}"}
         ],
         "temperature": 0.1,
     }
@@ -192,7 +179,7 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
                 json_str = match.group(0)
                 return json.loads(json_str)
             else:
-                return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
+                return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh": "", "so_hop/so_kg": ""}
                 
         except requests.exceptions.HTTPError as e:
             if 'response' in locals() and response.status_code == 429:
@@ -218,15 +205,15 @@ Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:
                 print(f"\nLỗi khi gọi API: {e}")
                 if 'response' in locals() and hasattr(response, 'text'):
                     print(f"Chi tiết response: {response.text}")
-                return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
+                return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh": "", "so_hop/so_kg": ""}
         except Exception as e:
             print(f"\nLỗi khi gọi API: {e}")
             if 'response' in locals() and hasattr(response, 'text'):
                 print(f"Chi tiết response: {response.text}")
-            return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
+            return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh": "", "so_hop/so_kg": ""}
             
     print(f"\n [!] Bỏ cuộc sau {max_retries} lần thử nghiệm. Bỏ qua file này.")
-    return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh_so_hop": "", "so_hop": ""}
+    return {"ten": "", "sdt": "", "dia_chi": "", "gia_chot": "", "ly_do_tinh": "", "so_hop/so_kg": ""}
 
 def main():
     all_json = glob.glob(os.path.join(DATA_DIR, "*.json"))
@@ -246,7 +233,7 @@ def main():
         print(f"Tạo file kết quả mới: {os.path.basename(OUTPUT_CSV)}\n")
     
     # Mở file CSV để ghi kết quả
-    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Hộp', 'Lý Do Tính Số Hộp']
+    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Lượng Hộp/KG', 'Lý Do Tính']
     
     # Check if we need to write header (csv_mode == 'w' or file is empty)
     write_header = csv_mode == 'w' or os.path.getsize(OUTPUT_CSV) == 0
@@ -282,18 +269,19 @@ def main():
             if not ten_khach:
                 ten_khach = data.get('customerName', '')
 
+            name_with_sohop = ten_khach + " - " + ai_result.get('so_hop/so_kg', '')
             # Ghi thông tin chi tiết vào CSV
             writer.writerow({
                 'File Nguồn': file_name,
-                'Tên Khách Hàng': ten_khach,
+                'Tên Khách Hàng': name_with_sohop,
                 'Số Điện Thoại': ai_result.get('sdt', ''),
                 'Địa Chỉ': ai_result.get('dia_chi', ''),
                 'Giá Chốt': ai_result.get('gia_chot', ''),
-                'Số Hộp': ai_result.get('so_hop', ''),
-                # 'Lý Do Tính Số Hộp': ai_result.get('ly_do_tinh_so_hop', '')
+                'Số Lượng Hộp/KG': ai_result.get('so_hop/so_kg', ''),
+                'Lý Do Tính': ai_result.get('ly_do_tinh', '')
             })
             
-            print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop', '')}")
+            print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop/so_kg', '')}")
             
             # Đổi tên file sang "done_" để đánh dấu đã xử lý
             new_file_name = f"done_{file_name}"

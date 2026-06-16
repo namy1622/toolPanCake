@@ -1279,4 +1279,15 @@ body {
 .cell-danger-mismatch .file-badge {
     background-color: var(--red-dim) !important;
     color: var(--red-glow) !important;
+}
+
+/* Flagged phone number highlight (nâu đỏ nhạt) */
+.cell-phone-flagged {
+    background-color: rgba(180, 83, 56, 0.2) !important;
+    border: 1px solid rgba(180, 83, 56, 0.35) !important;
+}
+.cell-phone-flagged,
+.cell-phone-flagged * {
+    color: #e8a087 !important;
+    text-shadow: 0 0 4px rgba(180, 83, 56, 0.3);
 }
