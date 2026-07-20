@@ -243,7 +243,7 @@ async function loadCsvData() {
         if (data.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="table-placeholder">Chưa có dữ liệu trích xuất cho ngày làm việc này. Hãy bấm "Chạy Phân Tích AI" để bắt đầu lọc dữ liệu.</td>
+                    <td colspan="7" class="table-placeholder">Chưa có dữ liệu trích xuất cho ngày làm việc này. Hãy bấm "Chạy Phân Tích AI" để bắt đầu lọc dữ liệu.</td>
                 </tr>
             `;
             return;
@@ -301,6 +301,7 @@ async function loadCsvData() {
                 <td class="${addressClass}" title="${row.address}">${row.address || 'Chưa rõ'}</td>
                 <td class="${priceClass}"><span class="text-green">${formatPrice(row.price)}đ</span></td>
                 <td class="${qtyClass}"><span class="file-badge done">${row.quantity || '-'}</span></td>
+                <td>${row.product_name || '-'}</td>
                 <td>
                     <button class="btn btn-xs btn-view-detail">Mở chat</button>
                 </td>
@@ -322,7 +323,8 @@ async function loadCsvData() {
                 });
                 
                 // Hiển thị bong bóng chat & Lập luận của AI
-                viewChatDetail(row.source_file, row.name, row.reason);
+                viewChatDetail(row.source_file, row.name);
+                // viewChatDetail(row.source_file, row.name, row.reason);  // reason đã tắt
             };
 
             // Double binding triggers
@@ -337,7 +339,7 @@ async function loadCsvData() {
     } catch (e) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="table-placeholder text-red">Lỗi tải dữ liệu CSV: ${e.message}</td>
+                <td colspan="7" class="table-placeholder text-red">Lỗi tải dữ liệu CSV: ${e.message}</td>
             </tr>
         `;
     }

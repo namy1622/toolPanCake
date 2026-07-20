@@ -193,8 +193,9 @@ async def get_csv(page: str, date: str):
                     "phone": row.get("Số Điện Thoại", ""),
                     "address": row.get("Địa Chỉ", ""),
                     "price": row.get("Giá Chốt", ""),
-                    "quantity": row.get("Số Hộp", ""),
-                    "reason": row.get("Lý Do Tính Số Hộp", row.get("Tổng Tin Nhắn", "")) # Backward compatibility
+                    "quantity": row.get("Số Lượng Hộp/KG", ""),
+                    "product_name": row.get("Tên Sản Phẩm", ""),
+                    # "reason": row.get("Lý Do Tính", "")  # Đã tắt - không cần trường này nữa
                 })
     except Exception as e:
         print(f"Error reading CSV: {e}")

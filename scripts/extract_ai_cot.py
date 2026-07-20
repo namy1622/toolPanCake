@@ -233,7 +233,8 @@ def main():
         print(f"Tạo file kết quả mới: {os.path.basename(OUTPUT_CSV)}\n")
     
     # Mở file CSV để ghi kết quả
-    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Lượng Hộp/KG', 'Lý Do Tính']
+    fieldnames = ['File Nguồn', 'Tên Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Giá Chốt', 'Số Lượng Hộp/KG', 'Tên Sản Phẩm']
+    # fieldnames cũ có 'Lý Do Tính' đã được thay bằng 'Tên Sản Phẩm'
     
     # Check if we need to write header (csv_mode == 'w' or file is empty)
     write_header = csv_mode == 'w' or os.path.getsize(OUTPUT_CSV) == 0
@@ -269,7 +270,12 @@ def main():
             if not ten_khach:
                 ten_khach = data.get('customerName', '')
 
-            name_with_sohop = ten_khach + " - " + ai_result.get('so_hop/so_kg', '')
+            name_with_sohop = ten_khach # + " - " + ai_result.get('so_hop/so_kg', '')
+
+            # Tạo tên sản phẩm dựa theo page đã chọn + số lượng
+            so_luong = ai_result.get('so_hop/so_kg', '')
+            ten_san_pham = f"{selected_page['name']} - {so_luong}" if so_luong else selected_page['name']
+
             # Ghi thông tin chi tiết vào CSV
             writer.writerow({
                 'File Nguồn': file_name,
@@ -278,7 +284,8 @@ def main():
                 'Địa Chỉ': ai_result.get('dia_chi', ''),
                 'Giá Chốt': ai_result.get('gia_chot', ''),
                 'Số Lượng Hộp/KG': ai_result.get('so_hop/so_kg', ''),
-                'Lý Do Tính': ai_result.get('ly_do_tinh', '')
+                'Tên Sản Phẩm': ten_san_pham,
+                # 'Lý Do Tính': ai_result.get('ly_do_tinh', '')  # Đã tắt - không cần trường này nữa
             })
             
             print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop/so_kg', '')}")
