@@ -287,6 +287,7 @@ def main():
                 'Tên Sản Phẩm': ten_san_pham,
                 # 'Lý Do Tính': ai_result.get('ly_do_tinh', '')  # Đã tắt - không cần trường này nữa
             })
+            csv_file.flush()
             
             print(f" -> Tên: {ten_khach} | SĐT: {ai_result.get('sdt', '')} | Địa chỉ: {ai_result.get('dia_chi', '')} | Giá: {ai_result.get('gia_chot', '')} | Số hộp: {ai_result.get('so_hop/so_kg', '')}")
             
