@@ -49,6 +49,8 @@ app.mount("/js", StaticFiles(directory=os.path.join(FRONTEND_DIR, "js")), name="
 PAGES = {
     "1": {"name": "Dây Thìa Canh", "folder": "DayThiaCanh", "url": "https://pancake.vn/571938736002434"},
     "2": {"name": "Trà Đông Trùng", "folder": "TraDongTrung", "url": "https://pancake.vn/941461145712453"},
+    "3": {"name": "Trà Dâu Tằm Khổ Qua", "folder": "DauTamKhoQua", "url": "https://pancake.vn/113475144961278"},
+
 }
 
 class ConnectionManager:

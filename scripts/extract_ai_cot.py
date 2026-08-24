@@ -25,6 +25,7 @@ else:
 PAGES = {
     "1": {"name": "Dây Thìa Canh", "folder": "DayThiaCanh"},
     "2": {"name": "Trà Đông Trùng", "folder": "TraDongTrung"},
+    "3": {"name": "Trà Dâu Tằm Khổ Qua", "folder": "DauTamKhoQua"}, 
 }
 
 # Đọc arguments từ Server

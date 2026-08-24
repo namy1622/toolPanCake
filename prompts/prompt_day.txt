@@ -16,9 +16,9 @@ Assistant:
   "ten": "",
   "sdt": "0901234567",
   "dia_chi": "123 le loi q1",
-  "gia_chot": "240000",
+  "gia_chot": "200000",
   "ly_do_tinh": "Người bán (Tôi) chốt cuối cùng là 3 hộp 240k, áp dụng mua 3 tặng 1. Tổng cộng khách nhận 4 hộp.",
-  "so_hop/so_kg": "4h"
+  "so_hop/so_kg": "2kg"
 }
 --- KẾT QUẢ TRẢ VỀ ---
 Chỉ trả về 1 khối JSON duy nhất, không có giải thích nào khác:

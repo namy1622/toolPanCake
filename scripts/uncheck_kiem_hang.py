@@ -31,6 +31,7 @@ else:
 PAGES = {
     "1": {"name": "Dây Thìa Canh", "url": "https://pancake.vn/571938736002434"},
     "2": {"name": "Trà Đông Trùng", "url": "https://pancake.vn/941461145712453"},
+    "3": {"name": "Trà Dâu Tằm Khổ Qua", "url": "https://pancake.vn/113475144961278"},
 }
 
 # Nhận tham số dòng lệnh cho page_choice
